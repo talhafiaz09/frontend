@@ -173,7 +173,7 @@ class Recipe extends Component {
                       marginLeft: 10,
                       fontFamily: 'Comfortaa-Bold',
                       fontSize: 14,
-                    }}>Salam</Text>
+                    }}>Salam Walikum</Text>
                 </View>
               </ScrollView>
             </View>
