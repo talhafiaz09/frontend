@@ -64,15 +64,6 @@ class Pantry extends Component {
       },
     };
   }
-  componentDidUpdate() {
-    // if (this.state.me == 0) {
-    //   this.getUserEmail();
-    //   setTimeout(() => {
-    //     this.fetchUserPantries();
-    //   }, 1500);
-    //   this.state.me++;
-    // }
-  }
   async fetchUserPantries() {
     await fetch(
       FETCH_URL.IP + '/pantry/userallpantries/' + this.state.useremail,
@@ -230,9 +221,6 @@ class Pantry extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        this.setState({
-          loading_animation: false,
-        });
         if (data.success) {
           toast_type = 'success';
           toast_text = 'Pantry deleted';
@@ -437,7 +425,6 @@ class Pantry extends Component {
             toast_show: true,
           });
           this.setState({
-            typing_animation_button: true,
             userpantries: [],
             userpantriesname: [],
             userpantriesningredients: [],
@@ -515,6 +502,7 @@ class Pantry extends Component {
                     <FontAwesome name="list-ul" color="#EF6C00" size={30} />
                   )}
                   <TextInput
+                    ref={'textfield'}
                     editable={!this.state.disable_button ? true : false}
                     onChangeText={(text) => {
                       this.setState({
@@ -538,6 +526,7 @@ class Pantry extends Component {
                 <TouchableWithoutFeedback
                   disabled={this.state.disable_button ? true : false}
                   onPress={() => {
+                    this.refs['textfield'].blur();
                     this.updatePantryName(index);
                   }}
                   onPressIn={() => {
@@ -590,6 +579,9 @@ class Pantry extends Component {
   }
   updatePantryName(id) {
     console.log(id);
+    this.setState({
+      loading_animation: true,
+    });
     if (this.checkPantryname()) {
       this.setState({
         typing_animation_button: true,
@@ -728,6 +720,7 @@ class Pantry extends Component {
                       <FontAwesome name="list-ul" color="#EF6C00" size={30} />
                     )}
                     <TextInput
+                      ref={'textfield'}
                       editable={!this.state.disable_button ? true : false}
                       onChangeText={(text) => {
                         this.setState({
@@ -751,6 +744,7 @@ class Pantry extends Component {
                   <TouchableWithoutFeedback
                     disabled={this.state.disable_button ? true : false}
                     onPress={() => {
+                      this.refs['textfield'].blur();
                       this.addtoPantry();
                     }}
                     onPressIn={() => {

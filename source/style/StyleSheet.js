@@ -471,5 +471,41 @@ const Styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  five_star_recipies: {
+    height: 300,
+    width: '100%',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
+  },
+  image_viewer_in_recipe: {
+    borderRadius: 10,
+    backgroundColor: 'black',
+    width: '100%',
+    height: '90%',
+  },
+  five_star_recipe_text: {
+    marginLeft: 10,
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 14,
+  },
+  other_recipies: {
+    height: 250,
+    width: '100%',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingRight: 10,
+  },
+  other_recipies_image_viewer: {
+    borderRadius: 10,
+    backgroundColor: 'black',
+    width: '100%',
+    height: '90%',
+  },
+  other_recipies_text: {
+    marginLeft: 10,
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 14,
+  },
 });
 export default Styles;

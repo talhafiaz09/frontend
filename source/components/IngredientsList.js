@@ -32,7 +32,7 @@ class IngredientsList extends Component {
     this.state = {
       username: '',
       isLoading: true,
-      toast_show: true,
+      toast_show: false,
       dairy_ingredients: [],
       vegetables_ingredients: [],
       fruits_ingredients: [],
@@ -86,9 +86,6 @@ class IngredientsList extends Component {
             showPantryLoading: false,
           });
         }
-        this.setState({
-          toast_show: false,
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -99,10 +96,12 @@ class IngredientsList extends Component {
           toast_type = 'error';
           toast_text = 'Network failure';
         }
-        this.setState({
-          toast_show: false,
-        });
       });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
   }
   async fetch_ingredients() {
     await fetch(FETCH_URL.IP + '/ingredient/allingredients', {
@@ -142,9 +141,6 @@ class IngredientsList extends Component {
           // toast_type = 'error';
           // toast_text = 'Ingredients not added!!';
         }
-        this.setState({
-          toast_show: false,
-        });
       })
       .catch((error) => {
         console.log(error);
@@ -155,10 +151,12 @@ class IngredientsList extends Component {
           toast_type = 'error';
           toast_text = 'Network failure';
         }
-        this.setState({
-          toast_show: false,
-        });
       });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
   }
   // increase_container_height(value) {
   //   if (value == 'Dairy') {
@@ -442,7 +440,7 @@ class IngredientsList extends Component {
                   <View style={{alignSelf: 'center'}}>
                     {show_loading_animation_pantry()}
                   </View>
-                ) : this.state.showPantryLoading &&
+                ) : !this.state.showPantryLoading &&
                   this.state.userpantriesname.length == 0 ? (
                   <Text
                     style={{
