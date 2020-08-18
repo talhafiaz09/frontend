@@ -435,7 +435,7 @@ class IngredientsList extends Component {
                   All Pantries
                 </Text>
               </View>
-              <View style={{height: 150, justifyContent: 'center'}}>
+              <View style={{height: 300, justifyContent: 'center'}}>
                 {this.state.showPantryLoading ? (
                   <View style={{alignSelf: 'center'}}>
                     {show_loading_animation_pantry()}
@@ -698,10 +698,7 @@ class IngredientsList extends Component {
               </Animated.View>
             </View>
             <View
-              style={[
-                Styles.ingredients_view_list_container,
-                {marginTop: 30, marginBottom: 40},
-              ]}>
+              style={[Styles.ingredients_view_list_container, {marginTop: 30}]}>
               <View style={Styles.ingredients_view_list_container_header}>
                 <View
                   style={Styles.ingredients_view_list_container_header_picture}>
@@ -777,6 +774,7 @@ class IngredientsList extends Component {
                 </View>
               </Animated.View>
             </View>
+            <View style={{marginBottom: 40}}></View>
           </ScrollView>
         </Animatable.View>
       </View>

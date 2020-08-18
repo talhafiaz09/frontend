@@ -33,10 +33,56 @@ class Recipe extends Component {
       toast_show: false,
       typing_animation_search_bar: false,
       recipe_names: [],
+      recipe_rating: [],
+      recipe_ingredients: [],
+      recipe_ingredients_quantity: [],
+      recipe_steps: [],
+      recipe_images: [],
     };
   }
-  async getRecipeApiData() {
-    await fetch(FETCH_URL.IP + '/recipe/getrecipiesfromapi', {
+  // async getRecipeApiData() {
+  //   await fetch(FETCH_URL.IP + '/recipe/getrecipiesfromapi', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //   })
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       if (data.success) {
+  //       } else {
+  //         console.log(data);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       if ('Timeout' || 'Network request failed') {
+  //         this.setState({
+  //           toast_show: true,
+  //         });
+  //         toast_type = 'error';
+  //         toast_text = 'Network failure';
+  //       }
+  //     });
+  //   setTimeout(() => {
+  //     this.setState({
+  //       toast_show: false,
+  //     });
+  //   }, 500);
+  // }
+  // toogle_typing_animation_search_bar() {
+  //   if (this.state.typing_animation_search_bar) {
+  //     this.setState({
+  //       typing_animation_search_bar: false,
+  //     });
+  //   } else {
+  //     this.setState({
+  //       typing_animation_search_bar: true,
+  //     });
+  //   }
+  // }
+  async getRecipiesfromDatabase() {
+    await fetch(FETCH_URL.IP + '/recipe/getallrecipiefromdb/', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -45,10 +91,24 @@ class Recipe extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          for (var q = 0; q < data.result.length; q++) {
-            this.state.recipe_names.push(data.result[q].name);
+          // console.log(data.recipies);
+          var ia = [];
+          var iq = [];
+          for (var q = 0; q < data.recipies.length; q++) {
+            this.state.recipe_names.push(data.recipies[q].name);
+            this.state.recipe_rating.push(data.recipies[q].rating);
+            for (var w = 0; w < data.recipies[q].ingredients.length; w++) {
+              ia.push(data.recipies[q].ingredients[w].name);
+              iq.push(data.recipies[q].ingredients[w].quantity);
+            }
+            this.state.recipe_ingredients.push(ia);
+            this.state.recipe_ingredients_quantity.push(iq);
+            this.state.recipe_steps.push(data.recipies[q].steps);
+            this.state.recipe_images.push(data.recipies[q].imageURL);
+            ia = [];
+            iq = [];
           }
-          console.log(this.state.recipe_names.length);
+          // console.log(this.state.recipe_images);
         } else {
           console.log(data);
         }
@@ -69,19 +129,63 @@ class Recipe extends Component {
       });
     }, 500);
   }
-  toogle_typing_animation_search_bar() {
-    if (this.state.typing_animation_search_bar) {
-      this.setState({
-        typing_animation_search_bar: false,
-      });
-    } else {
-      this.setState({
-        typing_animation_search_bar: true,
-      });
-    }
+  viewRecipeDetails(
+    name,
+    rating,
+    ingredients,
+    ingredients_quantity,
+    steps,
+    images,
+  ) {
+    console.log(ingredients);
+    this.props.navigation.navigate('RecipeDetails', {
+      name: name,
+      rating: rating,
+      ingredients: ingredients,
+      ingredients_quantity: ingredients_quantity,
+      steps: steps,
+      images: images,
+    });
+  }
+  mapRecommendedRecipies() {
+    return this.state.recipe_names.map((data, key) => {
+      return (
+        <View
+          key={key}
+          style={{
+            width: 250,
+            marginRight: 20,
+          }}>
+          <TouchableOpacity
+            onPress={() => {
+              this.viewRecipeDetails(
+                this.state.recipe_names[key],
+                this.state.recipe_rating[key],
+                this.state.recipe_ingredients[key],
+                this.state.recipe_ingredients_quantity[key],
+                this.state.recipe_steps[key],
+                this.state.recipe_images[key],
+              );
+            }}>
+            <View style={Styles.image_viewer_in_recipe}>
+              <Image
+                style={Styles.recipie_image_styling}
+                source={{
+                  uri: this.state.recipe_images[key],
+                }}
+              />
+            </View>
+          </TouchableOpacity>
+          <Text style={Styles.five_star_recipe_text}>
+            {this.state.recipe_names[key]}
+          </Text>
+        </View>
+      );
+    });
   }
   componentDidMount() {
-    this.getRecipeApiData();
+    // this.getRecipeApiData();
+    this.getRecipiesfromDatabase();
   }
   render() {
     return (
@@ -181,164 +285,166 @@ class Recipe extends Component {
               {/* Copy this view ti here*/}
             </ScrollView>
           </View>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                  5 star recipies:
-                </Text>
-              </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.five_star_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 250,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.image_viewer_in_recipe}></View>
-                    <Text style={Styles.five_star_recipe_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
-              </View>
+          {this.state.recipe_names.length == 0 ? (
+            <View
+              style={{
+                height: '100%',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              {show_loading_animation_pantry()}
             </View>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                  Desserts:
-                </Text>
+          ) : (
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                    Recommended recipies:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.five_star_recipies}>
+                    {/* Copy this view from here*/}
+                    {this.mapRecommendedRecipies()}
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.other_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 200,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.other_recipies_image_viewer}></View>
-                    <Text style={Styles.other_recipies_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                    Desserts:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.other_recipies}>
+                    {/* Copy this view from here*/}
+                    <View
+                      style={{
+                        width: 200,
+                        marginRight: 20,
+                      }}>
+                      <View style={Styles.other_recipies_image_viewer}></View>
+                      <Text style={Styles.other_recipies_text}>
+                        Salam Walikum
+                      </Text>
+                    </View>
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-            </View>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                  Fast Food:
-                </Text>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                    Fast Food:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.other_recipies}>
+                    {/* Copy this view from here*/}
+                    <View
+                      style={{
+                        width: 200,
+                        marginRight: 20,
+                      }}>
+                      <View style={Styles.other_recipies_image_viewer}></View>
+                      <Text style={Styles.other_recipies_text}>
+                        Salam Walikum
+                      </Text>
+                    </View>
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.other_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 200,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.other_recipies_image_viewer}></View>
-                    <Text style={Styles.other_recipies_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                    Des:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.other_recipies}>
+                    {/* Copy this view from here*/}
+                    <View
+                      style={{
+                        width: 200,
+                        marginRight: 20,
+                      }}>
+                      <View style={Styles.other_recipies_image_viewer}></View>
+                      <Text style={Styles.other_recipies_text}>
+                        Salam Walikum
+                      </Text>
+                    </View>
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-            </View>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                  Des:
-                </Text>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                    Sweet:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.other_recipies}>
+                    {/* Copy this view from here*/}
+                    <View
+                      style={{
+                        width: 200,
+                        marginRight: 20,
+                      }}>
+                      <View style={Styles.other_recipies_image_viewer}></View>
+                      <Text style={Styles.other_recipies_text}>
+                        Salam Walikum
+                      </Text>
+                    </View>
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.other_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 200,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.other_recipies_image_viewer}></View>
-                    <Text style={Styles.other_recipies_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
+              <View style={{}}>
+                <View style={{height: 50, justifyContent: 'center'}}>
+                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                    Sweet:
+                  </Text>
+                </View>
+                <View style={{width: '100%'}}>
+                  <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    style={Styles.other_recipies}>
+                    {/* Copy this view from here*/}
+                    <View
+                      style={{
+                        width: 200,
+                        marginRight: 20,
+                      }}>
+                      <View style={Styles.other_recipies_image_viewer}></View>
+                      <Text style={Styles.other_recipies_text}>
+                        Salam Walikum
+                      </Text>
+                    </View>
+                    {/* Copy this view to here*/}
+                  </ScrollView>
+                </View>
               </View>
-            </View>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                  Sweet:
-                </Text>
-              </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.other_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 200,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.other_recipies_image_viewer}></View>
-                    <Text style={Styles.other_recipies_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
-              </View>
-            </View>
-            <View style={{}}>
-              <View style={{height: 50, justifyContent: 'center'}}>
-                <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                  Sweet:
-                </Text>
-              </View>
-              <View style={{width: '100%'}}>
-                <ScrollView
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  style={Styles.other_recipies}>
-                  {/* Copy this view from here*/}
-                  <View
-                    style={{
-                      width: 200,
-                      marginRight: 20,
-                    }}>
-                    <View style={Styles.other_recipies_image_viewer}></View>
-                    <Text style={Styles.other_recipies_text}>
-                      Salam Walikum
-                    </Text>
-                  </View>
-                  {/* Copy this view to here*/}
-                </ScrollView>
-              </View>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          )}
         </Animatable.View>
       </View>
     );

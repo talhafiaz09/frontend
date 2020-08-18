@@ -92,7 +92,6 @@ class Pantry extends Component {
           console.log(data);
         }
         this.setState({
-          toast_show: false,
           loading_animation: false,
         });
       })
@@ -105,10 +104,12 @@ class Pantry extends Component {
           toast_type = 'error';
           toast_text = 'Network failure';
         }
-        this.setState({
-          toast_show: false,
-        });
       });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
   }
 
   componentDidMount() {
@@ -876,8 +877,8 @@ class Pantry extends Component {
             ) : (
               <View>{this.view_user_pantries()}</View>
             )}
+            <View style={{marginBottom: 40}}></View>
           </ScrollView>
-          <View style={{marginBottom: 30}}></View>
         </Animatable.View>
       </View>
     );

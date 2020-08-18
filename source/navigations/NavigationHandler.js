@@ -8,8 +8,10 @@ import SplashScreen from '../components/SplashScreen';
 import LoginScreen from '../components/LoginScreen';
 import SignupScreen from '../components/SignupScreen';
 import HomeScreen from '../components/HomeScreen';
+import RecipeDetails from '../components/RecipeDetails';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
+import RecipeDetail from '../components/RecipeDetails';
 const Stack = createStackNavigator();
 class SplashToLogin extends Component {
   constructor(props) {
@@ -55,37 +57,14 @@ class SplashToLogin extends Component {
               component={HomeScreen}
               options={{headerShown: false}}
             />
+            <Stack.Screen
+              name="RecipeDetails"
+              component={RecipeDetails}
+              options={{headerShown: false}}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </View>
-    );
-  }
-  SplashScreen() {
-    return (
-      <View>
-        <SplashScreen />
-      </View>
-    );
-  }
-  LoginScreen() {
-    return (
-      <Animatable.View animation="fadeIn">
-        <LoginScreen />
-      </Animatable.View>
-    );
-  }
-  SignupScreen() {
-    return (
-      <Animatable.View animation="fadeIn">
-        <SignupScreen />
-      </Animatable.View>
-    );
-  }
-  HomeScreen() {
-    return (
-      <Animatable.View animation="fadeIn">
-        <HomeScreen />
-      </Animatable.View>
     );
   }
 }

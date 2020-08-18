@@ -226,7 +226,7 @@ class LoginScreen extends Component {
   }
   moveToHomeScreen() {
     setTimeout(() => {
-      this.props.navigation.navigate('Home');
+      this.props.navigation.replace('Home');
     }, 1000);
   }
   FBbasicInfo() {

@@ -279,7 +279,7 @@ class SignupScreen extends Component {
   }
   moveToLoginScreen() {
     setTimeout(() => {
-      this.props.navigation.navigate('Login');
+      this.props.navigation.replace('Login');
     }, 1000);
   }
   render() {
@@ -498,7 +498,7 @@ class SignupScreen extends Component {
           </TouchableWithoutFeedback>
           <Text
             onPress={() => {
-              this.props.navigation.navigate('Login');
+              this.props.navigation.replace('Login');
             }}
             style={Styles.login_screen_signup_text}>
             Already a user? LogIn
