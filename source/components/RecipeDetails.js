@@ -3,7 +3,6 @@ import StarRating from 'react-native-star-rating';
 import {
   View,
   Text,
-  TouchableOpacity,
   TextInput,
   Image,
   ImageBackground,
@@ -12,6 +11,7 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
 } from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import Styles from '../style/StyleSheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -36,7 +36,151 @@ class RecipeDetails extends Component {
     super(props);
     this.state = {
       toast_show: false,
+      useremail: '',
+      isFavourite: false,
     };
+  }
+  componentDidMount() {
+    this.get_email();
+    // this.addToFavouritesHandler();
+  }
+  async get_email() {
+    try {
+      var email = await AsyncStorage.getItem('username');
+      this.setState({
+        useremail: email,
+      });
+    } catch (err) {}
+    this.checkIfFavourite();
+  }
+  async checkIfFavourite() {
+    console.log(this.props.route.params.id);
+    await fetch(FETCH_URL.IP + '/favourite/findfavouriterecipies', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        useremail: this.state.useremail,
+        recipeId: this.props.route.params.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.exist) {
+          console.log(data);
+          this.setState({
+            isFavourite: true,
+          });
+        } else if (data.success && !data.exist) {
+          this.setState({
+            isFavourite: false,
+          });
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if ('Timeout' || 'Network request failed') {
+          this.setState({
+            toast_show: true,
+          });
+          toast_type = 'error';
+          toast_text = 'Network failure';
+        }
+      });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
+  }
+  async addToFavouritesHandler() {
+    await fetch(FETCH_URL.IP + '/favourite/addtofavourite', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        useremail: this.state.useremail,
+        recipeId: this.props.route.params.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.status != 'Already exist') {
+          console.log(data);
+          this.setState({
+            toast_show: true,
+            isFavourite: true,
+          });
+          toast_type = 'success';
+          toast_text = 'Added to favourites';
+        } else if (data.success && data.status == 'Already exist') {
+          this.setState({
+            isFavourite: true,
+          });
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if ('Timeout' || 'Network request failed') {
+          this.setState({
+            toast_show: true,
+          });
+          toast_type = 'error';
+          toast_text = 'Network failure';
+        }
+      });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
+  }
+  async removeFromFavourite() {
+    await fetch(FETCH_URL.IP + '/favourite/removefromfavourite', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        useremail: this.state.useremail,
+        recipeId: this.props.route.params.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          console.log('here i am');
+          this.setState({
+            toast_show: true,
+            isFavourite: false,
+          });
+          toast_type = 'success';
+          toast_text = 'Removed from favourites';
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if ('Timeout' || 'Network request failed') {
+          this.setState({
+            toast_show: true,
+          });
+          toast_type = 'error';
+          toast_text = 'Network failure';
+        }
+      });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
   }
   mapIngredients() {
     return this.props.route.params.ingredients.map((data, key) => {
@@ -90,6 +234,7 @@ class RecipeDetails extends Component {
   render() {
     return (
       <Animated.View animaton="bounceInLeft" style={Styles.main_container}>
+        {console.log(this.props.route.params.nutrition.proteins)}
         <View style={Styles.toast_styling}>
           {toast(toast_type, toast_text)}
           {this.state.toast_show ? callToast() : null}
@@ -135,6 +280,7 @@ class RecipeDetails extends Component {
                 {this.props.route.params.name}
               </Text>
             </View>
+
             <View style={Styles.rating_view}>
               <StarRating
                 disabled={true}
@@ -145,6 +291,26 @@ class RecipeDetails extends Component {
               <Text style={Styles.rating_text}>
                 {this.props.route.params.rating}
               </Text>
+            </View>
+            <View style={Styles.heart_styling}>
+              <TouchableOpacity
+                onPress={() => {
+                  if (this.state.isFavourite) {
+                    this.removeFromFavourite();
+                  } else {
+                    this.addToFavouritesHandler();
+                  }
+                }}>
+                {this.state.isFavourite ? (
+                  <MaterialCommunityIcons color="red" name="heart" size={40} />
+                ) : (
+                  <MaterialCommunityIcons
+                    color="red"
+                    name="heart-outline"
+                    size={40}
+                  />
+                )}
+              </TouchableOpacity>
             </View>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -183,14 +349,19 @@ class RecipeDetails extends Component {
                     <Bar
                       animationType={'timing'}
                       useNativeDriver={false}
-                      progress={0.9}
+                      progress={
+                        parseInt(this.props.route.params.nutrition.proteins) /
+                        100
+                      }
                       width={null}
                       height={14}
                       color={'green'}
                     />
                   </View>
                   <View width={'15%'} style={{}}>
-                    <Text style={Styles.nutrition_value}>32</Text>
+                    <Text style={Styles.nutrition_value}>
+                      {this.props.route.params.nutrition.proteins}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -205,14 +376,18 @@ class RecipeDetails extends Component {
                     <Bar
                       animationType={'timing'}
                       useNativeDriver={false}
-                      progress={0.9}
+                      progress={
+                        parseInt(this.props.route.params.nutrition.fats) / 100
+                      }
                       width={null}
                       height={14}
                       color={'green'}
                     />
                   </View>
                   <View width={'15%'} style={{}}>
-                    <Text style={Styles.nutrition_value}>32</Text>
+                    <Text style={Styles.nutrition_value}>
+                      {this.props.route.params.nutrition.fats}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -227,14 +402,18 @@ class RecipeDetails extends Component {
                     <Bar
                       animationType={'timing'}
                       useNativeDriver={false}
-                      progress={0.9}
+                      progress={
+                        parseInt(this.props.route.params.nutrition.fiber) / 100
+                      }
                       width={null}
                       height={14}
                       color={'green'}
                     />
                   </View>
                   <View width={'15%'} style={{}}>
-                    <Text style={Styles.nutrition_value}>32</Text>
+                    <Text style={Styles.nutrition_value}>
+                      {this.props.route.params.nutrition.fiber}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -249,14 +428,19 @@ class RecipeDetails extends Component {
                     <Bar
                       animationType={'timing'}
                       useNativeDriver={false}
-                      progress={0.9}
+                      progress={
+                        parseInt(this.props.route.params.nutrition.vitamins) /
+                        100
+                      }
                       width={null}
                       height={14}
                       color={'green'}
                     />
                   </View>
                   <View width={'15%'} style={{}}>
-                    <Text style={Styles.nutrition_value}>32</Text>
+                    <Text style={Styles.nutrition_value}>
+                      {this.props.route.params.nutrition.vitamins}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -271,14 +455,20 @@ class RecipeDetails extends Component {
                     <Bar
                       animationType={'timing'}
                       useNativeDriver={false}
-                      progress={0.9}
+                      progress={
+                        parseInt(
+                          this.props.route.params.nutrition.carbohydrate,
+                        ) / 100
+                      }
                       width={null}
                       height={14}
                       color={'green'}
                     />
                   </View>
                   <View width={'15%'} style={{}}>
-                    <Text style={Styles.nutrition_value}>32</Text>
+                    <Text style={Styles.nutrition_value}>
+                      {this.props.route.params.nutrition.carbohydrate}
+                    </Text>
                   </View>
                 </View>
               </View>
@@ -295,6 +485,31 @@ class RecipeDetails extends Component {
                 </Text>
               </View>
               <View>{this.mapSteps()}</View>
+            </View>
+            <View style={{marginTop: 50}}>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginBottom: 10,
+                  }}>
+                  Video:
+                </Text>
+              </View>
+              <View>
+                {this.props.route.params.video == '' ||
+                this.props.route.params.video == null ? (
+                  <Text
+                    style={{
+                      alignSelf: 'center',
+                      fontFamily: 'Comfortaa-Medium',
+                      fontSize: 18,
+                    }}>
+                    Video not available.
+                  </Text>
+                ) : null}
+              </View>
             </View>
             <View style={{marginBottom: 40}}></View>
           </ScrollView>

@@ -328,6 +328,17 @@ class Pantry extends Component {
                 <MaterialCommunityIcons color="black" name="pencil" size={30} />
               </TouchableOpacity>
               <TouchableOpacity
+                style={{marginLeft: 15}}
+                onPress={() => {
+                  this.props.navigation.navigate('Recipe',{key:"asdasd", key2:"asdaas"} );
+                }}>
+                <MaterialCommunityIcons
+                  color="black"
+                  name="file-search"
+                  size={30}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
                 key={keys}
                 onPress={() => {
                   if (this.isFooterOpen[key]) {

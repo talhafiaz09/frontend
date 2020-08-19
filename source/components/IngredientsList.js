@@ -40,6 +40,7 @@ class IngredientsList extends Component {
       userpantriesname: [],
       userpantriesid: [],
       ingredientKey: null,
+      ingredientName: '',
       typing_animation_search_bar: false,
       show_model: false,
       showPantryLoading: true,
@@ -245,9 +246,7 @@ class IngredientsList extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ingredientname: this.state.dairy_ingredients[
-            this.state.ingredientKey
-          ],
+          ingredientname: this.state.ingredientName,
         }),
       },
     )
@@ -307,7 +306,7 @@ class IngredientsList extends Component {
           key={data}
           onPress={() => {
             this.setState({
-              ingredientKey: key,
+              ingredientName: this.state.dairy_ingredients[key],
               showPantryLoading: true,
               show_model: true,
             });
@@ -324,13 +323,13 @@ class IngredientsList extends Component {
     });
   }
   view_vegetable_ingredients() {
-    return this.state.dairy_ingredients.map((data, key) => {
+    return this.state.vegetables_ingredients.map((data, key) => {
       return (
         <TouchableOpacity
           key={data}
           onPress={() => {
             this.setState({
-              ingredientKey: key,
+              ingredientName: this.state.vegetables_ingredients[key],
               showPantryLoading: true,
               show_model: true,
             });
@@ -347,13 +346,13 @@ class IngredientsList extends Component {
     });
   }
   view_fruits_ingredients() {
-    return this.state.dairy_ingredients.map((data, key) => {
+    return this.state.fruits_ingredients.map((data, key) => {
       return (
         <TouchableOpacity
           key={data}
           onPress={() => {
             this.setState({
-              ingredientKey: key,
+              ingredientName: this.state.fruits_ingredients[key],
               showPantryLoading: true,
               show_model: true,
             });

@@ -33,11 +33,14 @@ class Recipe extends Component {
       toast_show: false,
       typing_animation_search_bar: false,
       recipe_names: [],
+      recipe_id: [],
       recipe_rating: [],
       recipe_ingredients: [],
       recipe_ingredients_quantity: [],
       recipe_steps: [],
       recipe_images: [],
+      recipe_nutrition: [],
+      recipe_video: [],
     };
   }
   // async getRecipeApiData() {
@@ -96,6 +99,7 @@ class Recipe extends Component {
           var iq = [];
           for (var q = 0; q < data.recipies.length; q++) {
             this.state.recipe_names.push(data.recipies[q].name);
+            this.state.recipe_id.push(data.recipies[q]._id);
             this.state.recipe_rating.push(data.recipies[q].rating);
             for (var w = 0; w < data.recipies[q].ingredients.length; w++) {
               ia.push(data.recipies[q].ingredients[w].name);
@@ -105,6 +109,8 @@ class Recipe extends Component {
             this.state.recipe_ingredients_quantity.push(iq);
             this.state.recipe_steps.push(data.recipies[q].steps);
             this.state.recipe_images.push(data.recipies[q].imageURL);
+            this.state.recipe_nutrition.push(data.recipies[q].nutrition);
+            this.state.recipe_video.push(data.recipies[q].video);
             ia = [];
             iq = [];
           }
@@ -130,21 +136,27 @@ class Recipe extends Component {
     }, 500);
   }
   viewRecipeDetails(
+    id,
     name,
     rating,
     ingredients,
     ingredients_quantity,
     steps,
     images,
+    nutrition,
+    video,
   ) {
     console.log(ingredients);
     this.props.navigation.navigate('RecipeDetails', {
+      id: id,
       name: name,
       rating: rating,
       ingredients: ingredients,
       ingredients_quantity: ingredients_quantity,
       steps: steps,
       images: images,
+      nutrition: nutrition,
+      video: video,
     });
   }
   mapRecommendedRecipies() {
@@ -159,12 +171,15 @@ class Recipe extends Component {
           <TouchableOpacity
             onPress={() => {
               this.viewRecipeDetails(
+                this.state.recipe_id[key],
                 this.state.recipe_names[key],
                 this.state.recipe_rating[key],
                 this.state.recipe_ingredients[key],
                 this.state.recipe_ingredients_quantity[key],
                 this.state.recipe_steps[key],
                 this.state.recipe_images[key],
+                this.state.recipe_nutrition[key],
+                this.state.recipe_video[key],
               );
             }}>
             <View style={Styles.image_viewer_in_recipe}>
@@ -185,6 +200,7 @@ class Recipe extends Component {
   }
   componentDidMount() {
     // this.getRecipeApiData();
+    // console.log(this.props);
     this.getRecipiesfromDatabase();
   }
   render() {

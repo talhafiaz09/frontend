@@ -5,6 +5,7 @@ import Styles from '../style/StyleSheet';
 import IngredientsList from '../components/IngredientsList';
 import Pantry from '../components/Pantry';
 import Recipe from '../components/Recipe';
+import FavoriteRecipies from '../components/FavouriteRecipies';
 import ShoppingList from '../components/ShoppingList';
 import * as Animatable from 'react-native-animatable';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -15,7 +16,7 @@ class HomeScreenNavigation extends Component {
   render() {
     return (
       <Tabs.Navigator
-        initialRouteName="Recipe"
+        initialRouteName="Favourites"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,
@@ -66,8 +67,9 @@ class HomeScreenNavigation extends Component {
         />
         <Tabs.Screen
           name="Favourites"
-          component={this.shopping_list}
+          component={this.favourite_recipe}
           options={{
+            unmountOnBlur: true,
             tabBarIcon: ({color}) => (
               <MaterialCommunityIcons
                 color={color}
@@ -120,6 +122,13 @@ class HomeScreenNavigation extends Component {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
         <ShoppingList navigation={navigation} />
+      </Animatable.View>
+    );
+  }
+  favourite_recipe({navigation}) {
+    return (
+      <Animatable.View animation="fadeIn" style={Styles.main_container}>
+        <FavoriteRecipies navigation={navigation} />
       </Animatable.View>
     );
   }
