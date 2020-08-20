@@ -16,6 +16,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
+import PantryFilteredRecipies from '../components/PantryFilteredRecipies';
 import {
   show_typing_animation_input_fields,
   show_loading_animation_ingredients,
@@ -32,6 +33,10 @@ class Recipe extends Component {
     this.state = {
       toast_show: false,
       typing_animation_search_bar: false,
+      gotParams: false,
+      gotdataFromParams: false,
+      filteredResults: null,
+      ingredients_exist: null,
       recipe_names: [],
       recipe_id: [],
       recipe_rating: [],
@@ -200,8 +205,59 @@ class Recipe extends Component {
   }
   componentDidMount() {
     // this.getRecipeApiData();
-    // console.log(this.props);
-    this.getRecipiesfromDatabase();
+    if (this.props.route.params) {
+      this.setState({
+        gotParams: true,
+      });
+      this.getFilteredPantryResult();
+    } else {
+      this.getRecipiesfromDatabase();
+    }
+  }
+  async getFilteredPantryResult() {
+    await fetch(
+      FETCH_URL.IP +
+        '/recipe/getrecipesonbaseofpantry/' +
+        this.props.route.params.pantryid,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.found) {
+          this.setState({
+            gotdataFromParams: true,
+            filteredResults: data.filteredResults,
+            ingredients_exist: data.ingredients_exist,
+          });
+          this.getRecipiesfromDatabase();
+        } else if (data.success && !data.found) {
+          this.setState({gotdataFromParams: false});
+          console.log('Nothing to show');
+          this.getRecipiesfromDatabase();
+        } else {
+          // console.log(data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        if ('Timeout' || 'Network request failed') {
+          this.setState({
+            toast_show: true,
+          });
+          toast_type = 'error';
+          toast_text = 'Network failure';
+        }
+      });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
   }
   render() {
     return (
@@ -312,6 +368,49 @@ class Recipe extends Component {
             </View>
           ) : (
             <ScrollView showsVerticalScrollIndicator={false}>
+              {this.state.gotParams && !this.state.gotdataFromParams ? (
+                <View style={{}}>
+                  <View style={{height: 50, justifyContent: 'center'}}>
+                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                      Searched:
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      height: 100,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 18}}>
+                      Oops no recipie to show
+                    </Text>
+                  </View>
+                </View>
+              ) : (
+                <View style={{}}>
+                  <View
+                    style={{
+                      height: 50,
+                      justifyContent: 'center',
+                      marginBottom: 20,
+                    }}>
+                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                      Searched:
+                    </Text>
+                  </View>
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                    <PantryFilteredRecipies
+                      navigation={this.props.navigation}
+                      filteredResults={this.state.filteredResults}
+                      ingredients_exist={this.state.ingredients_exist}
+                    />
+                  </View>
+                </View>
+              )}
               <View style={{}}>
                 <View style={{height: 50, justifyContent: 'center'}}>
                   <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>

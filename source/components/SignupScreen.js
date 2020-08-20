@@ -15,6 +15,7 @@ import * as Animatable from 'react-native-animatable';
 import Logoimage from '../assets/images/logo.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import VerificationCodeScreen from '../components/VerificationCodeScreen';
 import LinearGradient from 'react-native-linear-gradient';
 import ImagePicker from 'react-native-image-crop-picker';
 import {toast, callToast} from '../functions/Toast';
@@ -40,6 +41,7 @@ class SignupScreen extends Component {
       password: '',
       confirm_password: '',
       contentType: '',
+      showModal: false,
       toast_show: false,
       secureTextEntryPasswordField: true,
       secureTextEntryConfirmPasswordField: true,
@@ -219,8 +221,15 @@ class SignupScreen extends Component {
           });
           console.log(data);
           if (data.success) {
-            this.roundButtonAnimation();
-          } else if (data.error.name == 'UserExistsError') {
+            this.props.navigation.replace('VerificationCodeScreen', {
+              check: 'signup',
+              code: data.code,
+              username: this.state.username,
+              password: this.state.password,
+              profilepictureBase64: this.state.profilepictureBase64,
+              contentType: this.state.contentType,
+            });
+          } else if (!data.success && data.exist) {
             this.setState({
               toast_show: true,
             });
@@ -239,9 +248,6 @@ class SignupScreen extends Component {
               disable_button: false,
             });
           }
-          this.setState({
-            toast_show: false,
-          });
         })
         .catch((error) => {
           this.setState({
@@ -256,9 +262,13 @@ class SignupScreen extends Component {
           }
           this.setState({
             disable_button: false,
-            toast_show: false,
           });
         });
+      setTimeout(() => {
+        this.setState({
+          toast_show: false,
+        });
+      }, 250);
     }
   }
   async roundButtonAnimation() {

@@ -8,6 +8,7 @@ import SplashScreen from '../components/SplashScreen';
 import LoginScreen from '../components/LoginScreen';
 import SignupScreen from '../components/SignupScreen';
 import HomeScreen from '../components/HomeScreen';
+import VerificationCodeScreen from '../components/VerificationCodeScreen';
 import RecipeDetails from '../components/RecipeDetails';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -36,8 +37,10 @@ class SplashToLogin extends Component {
       <View style={Styles.main_container}>
         <StatusBar backgroundColor={'#EF6C00'} />
         <NavigationContainer>
-          <Stack.Navigator>
-            {/* <Stack.Screen
+          <Stack.Navigator
+          // initialRouteName="VerificationCodeScreen"
+          >
+            <Stack.Screen
               name="Splash"
               component={SplashScreen}
               options={{headerShown: false}}
@@ -51,7 +54,7 @@ class SplashToLogin extends Component {
               name="Signup"
               component={SignupScreen}
               options={{headerShown: false}}
-            /> */}
+            />
             <Stack.Screen
               name="Home"
               component={HomeScreen}
@@ -60,6 +63,11 @@ class SplashToLogin extends Component {
             <Stack.Screen
               name="RecipeDetails"
               component={RecipeDetails}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="VerificationCodeScreen"
+              component={VerificationCodeScreen}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

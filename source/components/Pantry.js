@@ -77,7 +77,7 @@ class Pantry extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log(data);
+          // console.log(data);
           this.setState({
             userpantries: data.Pantry,
           });
@@ -315,7 +315,11 @@ class Pantry extends Component {
                 onPress={() => {
                   this.deletePantry(this.state.userpantriesid[key]);
                 }}>
-                <MaterialCommunityIcons color="black" name="delete" size={30} />
+                <MaterialCommunityIcons
+                  color="#f04a2c"
+                  name="delete"
+                  size={30}
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{marginLeft: 15}}
@@ -325,16 +329,22 @@ class Pantry extends Component {
                     customindex: key,
                   });
                 }}>
-                <MaterialCommunityIcons color="black" name="pencil" size={30} />
+                <MaterialCommunityIcons
+                  color="#696969"
+                  name="pencil"
+                  size={30}
+                />
               </TouchableOpacity>
               <TouchableOpacity
                 style={{marginLeft: 15}}
                 onPress={() => {
-                  this.props.navigation.navigate('Recipe',{key:"asdasd", key2:"asdaas"} );
+                  this.props.navigation.navigate('Recipe', {
+                    pantryid: this.state.userpantriesid[key],
+                  });
                 }}>
                 <MaterialCommunityIcons
-                  color="black"
-                  name="file-search"
+                  color="#553600"
+                  name="magnify"
                   size={30}
                 />
               </TouchableOpacity>
@@ -393,7 +403,7 @@ class Pantry extends Component {
       return (
         <View key={key} style={{marginBottom: 10}}>
           <View style={Styles.pantry_ingredients_view}>
-            <Text style={Styles.pantries_list_view_text_ingredients_screen}>
+            <Text style={Styles.pantries_list_view_text_pantry_screen}>
               {data}
             </Text>
             <View style={{alignSelf: 'center'}}>
@@ -401,7 +411,11 @@ class Pantry extends Component {
                 onPress={() => {
                   this.deleteIngredientFromSelectedPantry(index, key);
                 }}>
-                <MaterialCommunityIcons color="black" name="delete" size={30} />
+                <MaterialCommunityIcons
+                  color="#f04a2c"
+                  name="delete"
+                  size={30}
+                />
               </TouchableOpacity>
             </View>
           </View>

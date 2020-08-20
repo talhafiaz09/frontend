@@ -1,6 +1,11 @@
 import {StyleSheet} from 'react-native';
 import {Dimensions} from 'react-native';
 const WINDOW_HEIGHT = Dimensions.get('window').height;
+export const CELL_SIZE = 70;
+export const CELL_BORDER_RADIUS = 8;
+export const DEFAULT_CELL_BG_COLOR = '#fff';
+export const NOT_EMPTY_CELL_BG_COLOR = 'black';
+export const ACTIVE_CELL_BG_COLOR = '#f7fafe';
 const Styles = StyleSheet.create({
   main_container: {
     flex: 1,
@@ -329,7 +334,8 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ingredients_view_list_styling: {
-    backgroundColor: '#ffbf00',
+    // backgroundColor: '#ffbf00',
+    backgroundColor: '#ffd23a',
     margin: 3,
     borderRadius: 5,
     justifyContent: 'center',
@@ -432,8 +438,8 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
     height: 50,
     flexDirection: 'row',
-    backgroundColor: '#ffbf00',
-    borderColor: '#ffbf00',
+    backgroundColor: '#ffd23a',
+    borderColor: '#ffd23a',
     borderWidth: 2,
     borderRadius: 20,
     shadowColor: '#000',
@@ -469,6 +475,14 @@ const Styles = StyleSheet.create({
     fontFamily: 'Comfortaa-Bold',
     width: '80%',
     color: 'black',
+    alignSelf: 'center',
+    marginLeft: 20,
+    fontSize: 18,
+  },
+  pantries_list_view_text_pantry_screen: {
+    fontFamily: 'Comfortaa-Bold',
+    width: '80%',
+    color: 'white',
     alignSelf: 'center',
     marginLeft: 20,
     fontSize: 18,
@@ -600,6 +614,7 @@ const Styles = StyleSheet.create({
   view_recipie_main_container: {
     backgroundColor: '#fcfcfd',
     borderColor: '#fcfcfd',
+    marginBottom: 20,
     borderWidth: 2,
     elevation: 5,
     shadowColor: '#000',
@@ -634,6 +649,85 @@ const Styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  codeFieldRoot: {
+    height: CELL_SIZE,
+    marginTop: 30,
+    paddingHorizontal: 20,
+    justifyContent: 'center',
+  },
+  cell: {
+    marginHorizontal: 8,
+    height: CELL_SIZE,
+    width: CELL_SIZE,
+    lineHeight: CELL_SIZE - 5,
+    ...Platform.select({web: {lineHeight: 65}}),
+    fontSize: 30,
+    textAlign: 'center',
+    borderRadius: CELL_BORDER_RADIUS,
+    color: '#3759b8',
+    backgroundColor: '#fff',
+
+    // IOS
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.22,
+    shadowRadius: 2.22,
+
+    // Android
+    elevation: 3,
+  },
+
+  // =======================
+
+  root: {
+    minHeight: 800,
+    padding: 20,
+  },
+  title: {
+    paddingTop: 50,
+    color: '#000',
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 25,
+    textAlign: 'center',
+    paddingBottom: 40,
+  },
+  icon: {
+    width: 217 / 2.4,
+    height: 158 / 2.4,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  subTitle: {
+    paddingTop: 30,
+    color: '#000',
+    fontFamily: 'Comfortaa-Bold',
+    textAlign: 'center',
+  },
+  nextButton: {
+    marginTop: 30,
+    borderRadius: 60,
+    height: 60,
+    backgroundColor: '#3557b7',
+    justifyContent: 'center',
+    marginBottom: 100,
+  },
+  nextButtonText: {
+    textAlign: 'center',
+    fontSize: 20,
+    fontFamily: 'Comfortaa-Bold',
+    color: '#fff',
+  },
+  pin_fields: {
+    backgroundColor: 'white',
+    textAlign: 'center',
+    fontSize: 30,
+    borderRadius: 10,
+    height: 60,
+    width: 50,
   },
 });
 export default Styles;

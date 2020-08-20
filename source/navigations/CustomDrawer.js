@@ -82,7 +82,7 @@ export function Sidebar({...props}) {
           style={{alignSelf: 'center'}}
           onPress={() => {
             props.clearAsyncStorage();
-            props.navigation.navigate('Login');
+            props.navigation.replace('Login');
           }}
           label="Log out"
           labelStyle={{fontFamily: 'Comfortaa-Regular'}}

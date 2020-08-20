@@ -389,7 +389,7 @@ class IngredientsList extends Component {
                 onPress={() => {
                   this.addtoPantry(key);
                 }}>
-                <MaterialCommunityIcons color="black" name="plus" size={30} />
+                <MaterialCommunityIcons color="green" name="plus" size={30} />
               </TouchableOpacity>
             </View>
           </View>

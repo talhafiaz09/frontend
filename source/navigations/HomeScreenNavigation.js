@@ -16,7 +16,7 @@ class HomeScreenNavigation extends Component {
   render() {
     return (
       <Tabs.Navigator
-        initialRouteName="Favourites"
+        initialRouteName="Pantry"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,
@@ -61,6 +61,7 @@ class HomeScreenNavigation extends Component {
           name="Recipe"
           component={this.recipe}
           options={{
+            unmountOnBlur: true,
             tabBarIcon: () => <RecipeButton />,
             tabBarLabel: () => {},
           }}
@@ -97,38 +98,38 @@ class HomeScreenNavigation extends Component {
       </Tabs.Navigator>
     );
   }
-  ingredients({navigation}) {
+  ingredients({navigation, route}) {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
-        <IngredientsList navigation={navigation} />
+        <IngredientsList navigation={navigation} route={route} />
       </Animatable.View>
     );
   }
-  pantry({navigation}) {
+  pantry({navigation, route}) {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
-        <Pantry navigation={navigation} />
+        <Pantry navigation={navigation} route={route} />
       </Animatable.View>
     );
   }
-  recipe({navigation}) {
+  recipe({navigation, route}) {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
-        <Recipe navigation={navigation} />
+        <Recipe navigation={navigation} route={route} />
       </Animatable.View>
     );
   }
-  shopping_list({navigation}) {
+  shopping_list({navigation, route}) {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
-        <ShoppingList navigation={navigation} />
+        <ShoppingList navigation={navigation} route={route} />
       </Animatable.View>
     );
   }
-  favourite_recipe({navigation}) {
+  favourite_recipe({navigation, route}) {
     return (
       <Animatable.View animation="fadeIn" style={Styles.main_container}>
-        <FavoriteRecipies navigation={navigation} />
+        <FavoriteRecipies navigation={navigation} route={route} />
       </Animatable.View>
     );
   }

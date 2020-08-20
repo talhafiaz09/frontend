@@ -544,7 +544,7 @@ class LoginScreen extends Component {
           </TouchableWithoutFeedback>
           <Text
             onPress={() => {
-              this.props.navigation.navigate('Signup');
+              this.props.navigation.replace('Signup');
             }}
             style={Styles.login_screen_signup_text}>
             New user? SignUp
