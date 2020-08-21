@@ -729,5 +729,18 @@ const Styles = StyleSheet.create({
     height: 60,
     width: 50,
   },
+  change_password_field: {
+    flexDirection: 'row',
+    borderWidth: 1.5,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    marginTop: 20,
+    borderRadius: 10,
+    borderColor: '#ffffff',
+    backgroundColor: '#ffffffff',
+  },
 });
 export default Styles;

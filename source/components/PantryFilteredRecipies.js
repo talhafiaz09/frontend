@@ -45,36 +45,40 @@ class PantryFilteredRecipies extends Component {
   }
   UNSAFE_componentWillMount() {
     console.log(this.props.filteredResults);
-    var ia = [];
-    var iq = [];
-    var ex = [];
-    for (var q = 0; q < this.props.filteredResults.length; q++) {
-      this.state.recipe_names.push(this.props.filteredResults[q].name);
-      this.state.recipe_id.push(this.props.filteredResults[q]._id);
-      this.state.recipe_rating.push(this.props.filteredResults[q].rating);
-      for (
-        var w = 0;
-        w < this.props.filteredResults[q].ingredients.length;
-        w++
-      ) {
-        ia.push(this.props.filteredResults[q].ingredients[w].name);
-        iq.push(this.props.filteredResults[q].ingredients[w].quantity);
+    if (this.props.filteredResults != null) {
+      var ia = [];
+      var iq = [];
+      var ex = [];
+      for (var q = 0; q < this.props.filteredResults.length; q++) {
+        this.state.recipe_names.push(this.props.filteredResults[q].name);
+        this.state.recipe_id.push(this.props.filteredResults[q]._id);
+        this.state.recipe_rating.push(this.props.filteredResults[q].rating);
+        for (
+          var w = 0;
+          w < this.props.filteredResults[q].ingredients.length;
+          w++
+        ) {
+          ia.push(this.props.filteredResults[q].ingredients[w].name);
+          iq.push(this.props.filteredResults[q].ingredients[w].quantity);
+        }
+        this.state.recipe_ingredients.push(ia);
+        this.state.recipe_ingredients_quantity.push(iq);
+        this.state.recipe_steps.push(this.props.filteredResults[q].steps);
+        this.state.recipe_images.push(this.props.filteredResults[q].imageURL);
+        this.state.recipe_nutrition.push(
+          this.props.filteredResults[q].nutrition,
+        );
+        this.state.recipe_video.push(this.props.filteredResults[q].video);
+        for (var y = 0; y < this.props.ingredients_exist[q].length; y++) {
+          ex.push(this.props.ingredients_exist[q][y].name);
+        }
+        this.state.ingredients_exist.push(ex);
+        ex = [];
+        ia = [];
+        iq = [];
       }
-      this.state.recipe_ingredients.push(ia);
-      this.state.recipe_ingredients_quantity.push(iq);
-      this.state.recipe_steps.push(this.props.filteredResults[q].steps);
-      this.state.recipe_images.push(this.props.filteredResults[q].imageURL);
-      this.state.recipe_nutrition.push(this.props.filteredResults[q].nutrition);
-      this.state.recipe_video.push(this.props.filteredResults[q].video);
-      for (var y = 0; y < this.props.ingredients_exist[q].length; y++) {
-        ex.push(this.props.ingredients_exist[q][y].name);
-      }
-      this.state.ingredients_exist.push(ex);
-      ex = [];
-      ia = [];
-      iq = [];
+      console.log();
     }
-    console.log();
   }
   mapIngredients(index) {
     return this.state.ingredients_exist[index].map((data, key) => {

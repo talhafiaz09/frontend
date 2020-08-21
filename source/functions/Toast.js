@@ -7,7 +7,7 @@ let animatedValue = new Animated.Value(-80);
 export function callToast() {
   Animated.timing(animatedValue, {
     toValue: 0,
-    duration: 350,
+    duration: 250,
     useNativeDriver: false,
   }).start(closeToast());
 }
@@ -16,10 +16,10 @@ function closeToast() {
   setTimeout(() => {
     Animated.timing(animatedValue, {
       toValue: -80,
-      duration: 350,
+      duration: 250,
       useNativeDriver: false,
     }).start();
-  }, 2000);
+  }, 800);
 }
 export function toast(type, text) {
   toast_text = text;

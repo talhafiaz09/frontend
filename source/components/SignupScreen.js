@@ -208,7 +208,7 @@ class SignupScreen extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: this.state.username,
+          username: this.state.username.toLowerCase(),
           password: this.state.password,
           profilepictureBase64: this.state.profilepictureBase64,
           contentType: this.state.contentType,
@@ -224,7 +224,7 @@ class SignupScreen extends Component {
             this.props.navigation.replace('VerificationCodeScreen', {
               check: 'signup',
               code: data.code,
-              username: this.state.username,
+              username: this.state.username.toLowerCase(),
               password: this.state.password,
               profilepictureBase64: this.state.profilepictureBase64,
               contentType: this.state.contentType,
@@ -508,7 +508,7 @@ class SignupScreen extends Component {
           </TouchableWithoutFeedback>
           <Text
             onPress={() => {
-              this.props.navigation.replace('Login');
+              this.props.navigation.pop();
             }}
             style={Styles.login_screen_signup_text}>
             Already a user? LogIn

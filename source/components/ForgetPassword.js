@@ -13,7 +13,7 @@ import {
 } from '../functions/FunctionHandler';
 var toast_type = '';
 var toast_text = '';
-class VerificationCodeScreen extends Component {
+class ForgetPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,56 +26,54 @@ class VerificationCodeScreen extends Component {
       typing_animation_button: false,
     };
   }
-  saveUser() {
-    fetch(FETCH_URL.IP + '/user/signupAfterConfirmation', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: this.props.route.params.username.toLowerCase(),
-        password: this.props.route.params.password,
-        profilepictureBase64: this.props.route.params.profilepictureBase64,
-        contentType: this.props.route.params.contentType,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          toast_type = 'success';
-          toast_text = 'Registration successful';
-          this.setState({
-            toast_show: true,
-          });
-          setTimeout(() => {
-            this.setState({
-              toast_show: false,
-            });
-            this.props.navigation.pop();
-          }, 500);
-        } else {
-          this.setState({
-            toast_show: true,
-          });
-          toast_type = 'error';
-          toast_text = 'Registration unsuccessful';
-        }
-      })
-      .catch((error) => {
-        if ('Timeout' || 'Network request failed') {
-          this.setState({
-            toast_show: true,
-          });
-          toast_type = 'error';
-          toast_text = 'Network failure';
-        }
-      });
-    setTimeout(() => {
-      this.setState({
-        toast_show: false,
-      });
-    }, 250);
-  }
+  //   changePassword() {
+  //     fetch(FETCH_URL.IP + '/user/forgetpassword', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         username: this.props.route.params.username.toLowerCase(),
+  //         password: this.props.route.params.password,
+  //       }),
+  //     })
+  //       .then((res) => res.json())
+  //       .then((data) => {
+  //         if (data.success) {
+  //           toast_type = 'success';
+  //           toast_text = 'Password Changed';
+  //           this.setState({
+  //             toast_show: true,
+  //           });
+  //           setTimeout(() => {
+  //             this.setState({
+  //               toast_show: false,
+  //             });
+  //             this.props.navigation.pop();
+  //           }, 500);
+  //         } else {
+  //           this.setState({
+  //             toast_show: true,
+  //           });
+  //           toast_type = 'error';
+  //           toast_text = 'Password not changed';
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         if ('Timeout' || 'Network request failed') {
+  //           this.setState({
+  //             toast_show: true,
+  //           });
+  //           toast_type = 'error';
+  //           toast_text = 'Network failure';
+  //         }
+  //       });
+  //     setTimeout(() => {
+  //       this.setState({
+  //         toast_show: false,
+  //       });
+  //     }, 250);
+  //   }
   render() {
     const {pin1, pin2, pin3, pin4} = this.state;
     return (
@@ -86,7 +84,7 @@ class VerificationCodeScreen extends Component {
         </View>
         <View style={[Styles.main_container, {padding: 20}]}>
           <View flex={0.4}>
-            <Text style={Styles.title}>Verification</Text>
+            <Text style={Styles.title}>Forget Password</Text>
             <Image
               style={Styles.icon}
               source={{
@@ -167,14 +165,21 @@ class VerificationCodeScreen extends Component {
                   console.log(this.props);
                   if (code == this.props.route.params.code) {
                     this.setState({isDisabled: true});
-                    this.saveUser();
+                    this.setState({
+                      toast_show: true,
+                    });
+                    toast_type = 'success';
+                    toast_text = 'Correct code';
+                    setTimeout(() => {
+                      this.setState({toast_show: false});
+                      this.props.navigation.replace('Changepasswordscreen', {
+                        username: this.props.route.params.username,
+                      });
+                    }, 500);
                   } else {
                     this.setState({
                       isDisabled: false,
                       typing_animation_button: false,
-                    });
-
-                    this.setState({
                       toast_show: true,
                     });
                     toast_type = 'error';
@@ -199,4 +204,4 @@ class VerificationCodeScreen extends Component {
     );
   }
 }
-export default VerificationCodeScreen;
+export default ForgetPassword;

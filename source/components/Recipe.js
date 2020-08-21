@@ -205,7 +205,8 @@ class Recipe extends Component {
   }
   componentDidMount() {
     // this.getRecipeApiData();
-    if (this.props.route.params) {
+    console.log(this.props.route.params);
+    if (this.props.route.params != null) {
       this.setState({
         gotParams: true,
       });
@@ -386,7 +387,7 @@ class Recipe extends Component {
                     </Text>
                   </View>
                 </View>
-              ) : (
+              ) : this.state.gotParams && this.state.gotdataFromParams ? (
                 <View style={{}}>
                   <View
                     style={{
@@ -410,7 +411,7 @@ class Recipe extends Component {
                     />
                   </View>
                 </View>
-              )}
+              ) : null}
               <View style={{}}>
                 <View style={{height: 50, justifyContent: 'center'}}>
                   <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>

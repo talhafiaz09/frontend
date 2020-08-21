@@ -149,7 +149,7 @@ class LoginScreen extends Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: this.state.username,
+          username: this.state.username.toLowerCase(),
           password: this.state.password,
         }),
       })
@@ -205,7 +205,7 @@ class LoginScreen extends Component {
     }
   }
   save_to_AsyncStorage() {
-    AsyncStorage.setItem('username', this.state.username);
+    AsyncStorage.setItem('username', this.state.username.toLowerCase());
   }
   async roundButtonAnimation() {
     this.save_to_AsyncStorage();
@@ -277,7 +277,7 @@ class LoginScreen extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        username: this.state.username,
+        username: this.state.username.toLowerCase(),
         password: 'facebook_or_google_account',
         profilepictureBase64: this.state.profilepictureBase64,
         contentType: 'image/png',
@@ -339,6 +339,7 @@ class LoginScreen extends Component {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         this.setState({
           toast_show: true,
+          typing_animation_button: false,
         });
         toast_type = 'error';
         toast_text = 'Login cancelled';
@@ -385,6 +386,7 @@ class LoginScreen extends Component {
             toast_text = 'Login cancelled';
             this.setState({
               disable_button: false,
+              typing_animation_button: false,
             });
           } else {
             this.setState({
@@ -395,6 +397,67 @@ class LoginScreen extends Component {
         }
       },
     );
+  }
+  getCode() {
+    if (this.state.username == '') {
+      this.setState({
+        toast_show: true,
+      });
+      toast_type = 'error';
+      toast_text = 'Enter email';
+    } else if (!this.state.textfield_input_change_check) {
+      this.setState({
+        toast_show: true,
+      });
+      toast_type = 'error';
+      toast_text = 'Enter valid email';
+    } else {
+      fetch(FETCH_URL.IP + '/user/getcode', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // username: this.props.route.params.username.toLowerCase(),
+          username: this.state.username.toLowerCase(),
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            console.log(data.code);
+            this.setState({
+              toast_show: false,
+            });
+            setTimeout(() => {
+              this.props.navigation.navigate('Forgetpassword', {
+                code: data.code,
+                username: this.state.username,
+              });
+            }, 500);
+          } else {
+            this.setState({
+              toast_show: true,
+            });
+            toast_type = 'error';
+            toast_text = 'Code not sent';
+          }
+        })
+        .catch((error) => {
+          if ('Timeout' || 'Network request failed') {
+            this.setState({
+              toast_show: true,
+            });
+            toast_type = 'error';
+            toast_text = 'Network failure';
+          }
+        });
+    }
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 250);
   }
   render() {
     return (
@@ -496,9 +559,14 @@ class LoginScreen extends Component {
               )}
             </TouchableOpacity>
           </View>
-          <Text style={Styles.login_screen_forget_password}>
-            Forget password?
-          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              this.getCode();
+            }}>
+            <Text style={Styles.login_screen_forget_password}>
+              Forget password?
+            </Text>
+          </TouchableOpacity>
           <TouchableWithoutFeedback
             disabled={this.state.disable_button ? true : false}
             onPress={() => {
@@ -544,7 +612,7 @@ class LoginScreen extends Component {
           </TouchableWithoutFeedback>
           <Text
             onPress={() => {
-              this.props.navigation.replace('Signup');
+              this.props.navigation.navigate('Signup');
             }}
             style={Styles.login_screen_signup_text}>
             New user? SignUp
