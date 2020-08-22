@@ -13,20 +13,28 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       username: '',
+      imageUri: '',
     };
-    this.display_email();
   }
-  async display_email() {
+  UNSAFE_componentWillMount() {
+    this.getUserInfo();
+  }
+  async getUserInfo() {
     try {
       var email = await AsyncStorage.getItem('username');
+      var profilepicture = await AsyncStorage.getItem('profilepicture');
+      profilepicture = 'data:image/png;base64,' + profilepicture;
       this.setState({
         username: email,
+        imageUri: profilepicture,
       });
+      console.log(profilepicture);
     } catch (err) {}
   }
   async clearAsyncStorage() {
     try {
       await AsyncStorage.removeItem('username');
+      await AsyncStorage.removeItem('profilepicture');
     } catch (err) {}
   }
   render() {
@@ -40,6 +48,7 @@ class HomeScreen extends Component {
           <Sidebar
             {...props}
             username={this.state.username}
+            imageUri={this.state.imageUri}
             clearAsyncStorage={this.clearAsyncStorage}
           />
         )}>

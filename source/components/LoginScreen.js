@@ -158,8 +158,10 @@ class LoginScreen extends Component {
           this.setState({
             typing_animation_button: false,
           });
-          console.log(data);
           if (data.success) {
+            this.setState({
+              profilepictureBase64: data.user.profilepicture.data,
+            });
             this.roundButtonAnimation();
           } else if (
             data.error.name == 'IncorrectUsernameError' ||
@@ -206,6 +208,7 @@ class LoginScreen extends Component {
   }
   save_to_AsyncStorage() {
     AsyncStorage.setItem('username', this.state.username.toLowerCase());
+    AsyncStorage.setItem('profilepicture', this.state.profilepictureBase64);
   }
   async roundButtonAnimation() {
     this.save_to_AsyncStorage();

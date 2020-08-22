@@ -32,7 +32,10 @@ export function Sidebar({...props}) {
           <View>
             <View style={Styles.drawer_user_profile_pic_container}>
               <View style={Styles.profile_picture_container}>
-                <Image style={Styles.profile_picture} source={Image_Http_URL} />
+                <Image
+                  style={Styles.profile_picture}
+                  source={{uri: props.imageUri}}
+                />
               </View>
               <View style={Styles.user_name_container}>
                 <Text style={Styles.user_name_styling}>

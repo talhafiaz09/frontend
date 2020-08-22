@@ -80,18 +80,7 @@ class ProfileScreen extends Component {
       .catch((err) => {});
   }
   toggle_animation_values(value) {
-    if (value == 'email' && this.state.typing_animation_email == false) {
-      this.setState({
-        typing_animation_email: true,
-      });
-    } else if (value == 'email' && this.state.typing_animation_email == true) {
-      this.setState({
-        typing_animation_email: false,
-      });
-    } else if (
-      value == 'password' &&
-      this.state.typing_animation_password == false
-    ) {
+    if (value == 'password' && this.state.typing_animation_password == false) {
       this.setState({
         typing_animation_password: true,
       });
@@ -158,6 +147,21 @@ class ProfileScreen extends Component {
       }
     }
   }
+  async getUserInfo() {
+    try {
+      var email = await AsyncStorage.getItem('username');
+      var profilepicture = await AsyncStorage.getItem('profilepicture');
+      profilepicture = 'data:image/png;base64,' + profilepicture;
+      this.setState({
+        username: email,
+        imageUri: profilepicture,
+      });
+      console.log(profilepicture);
+    } catch (err) {}
+  }
+  UNSAFE_componentWillMount() {
+    this.getUserInfo();
+  }
   render() {
     return (
       <View style={Styles.main_container}>
@@ -216,14 +220,12 @@ class ProfileScreen extends Component {
                 Styles.signup_screen_image_container,
                 {transform: [{scale: this.state.animationPressPicture}]},
               ]}>
-              {this.state.imageUri == '' ? (
-                <AddImage height={100} width={100} style={{marginLeft: 20}} />
-              ) : (
+              {this.state.imageUri != '' ? (
                 <Image
                   style={Styles.signup_screen_image_uploader}
                   source={{uri: this.state.imageUri}}
                 />
-              )}
+              ) : null}
             </Animated.View>
           </TouchableWithoutFeedback>
           <View style={Styles.login_screen_input_fields_container}>
@@ -233,28 +235,13 @@ class ProfileScreen extends Component {
               <FontAwesome name="user" color="#EF6C00" size={30} />
             )}
             <TextInput
-              editable={!this.state.disable_button ? true : false}
+              editable={false}
               ref="email_input"
-              onFocus={() => {
-                this.toggle_animation_values('email');
-              }}
-              onBlur={() => {
-                this.toggle_animation_values('email');
-              }}
+              value={this.state.username}
               style={Styles.input_field}
               placeholder="Email"
-              onChangeText={(text) => {
-                this.setState({
-                  username: text,
-                });
-                this.textInputChange(text);
-              }}
             />
-            {this.state.textfield_input_change_check ? (
-              <Feather name="check-circle" color="green" size={20} />
-            ) : this.state.username != '' ? (
-              <Feather name="x-circle" color="red" size={20} />
-            ) : null}
+            <Feather name="check-circle" color="green" size={20} />
           </View>
           <View style={Styles.login_screen_input_fields_container}>
             {this.state.typing_animation_password ? (
