@@ -353,7 +353,7 @@ class Recipe extends Component {
               showsHorizontalScrollIndicator={false}>
               {/* Copy this view from here*/}
               <View style={{}}>
-                <Text>Filter Tags</Text>
+                <Text>Tags here</Text>
               </View>
               {/* Copy this view ti here*/}
             </ScrollView>
@@ -415,7 +415,7 @@ class Recipe extends Component {
               <View style={{}}>
                 <View style={{height: 50, justifyContent: 'center'}}>
                   <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                    Recommended recipies:
+                    5 star recipies:
                   </Text>
                 </View>
                 <View style={{width: '100%'}}>
@@ -433,110 +433,6 @@ class Recipe extends Component {
                 <View style={{height: 50, justifyContent: 'center'}}>
                   <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
                     Desserts:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.other_recipies}>
-                    {/* Copy this view from here*/}
-                    <View
-                      style={{
-                        width: 200,
-                        marginRight: 20,
-                      }}>
-                      <View style={Styles.other_recipies_image_viewer}></View>
-                      <Text style={Styles.other_recipies_text}>
-                        Salam Walikum
-                      </Text>
-                    </View>
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                    Fast Food:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.other_recipies}>
-                    {/* Copy this view from here*/}
-                    <View
-                      style={{
-                        width: 200,
-                        marginRight: 20,
-                      }}>
-                      <View style={Styles.other_recipies_image_viewer}></View>
-                      <Text style={Styles.other_recipies_text}>
-                        Salam Walikum
-                      </Text>
-                    </View>
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                    Des:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.other_recipies}>
-                    {/* Copy this view from here*/}
-                    <View
-                      style={{
-                        width: 200,
-                        marginRight: 20,
-                      }}>
-                      <View style={Styles.other_recipies_image_viewer}></View>
-                      <Text style={Styles.other_recipies_text}>
-                        Salam Walikum
-                      </Text>
-                    </View>
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                    Sweet:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.other_recipies}>
-                    {/* Copy this view from here*/}
-                    <View
-                      style={{
-                        width: 200,
-                        marginRight: 20,
-                      }}>
-                      <View style={Styles.other_recipies_image_viewer}></View>
-                      <Text style={Styles.other_recipies_text}>
-                        Salam Walikum
-                      </Text>
-                    </View>
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                    Sweet:
                   </Text>
                 </View>
                 <View style={{width: '100%'}}>

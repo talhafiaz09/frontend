@@ -32,39 +32,44 @@ export function Sidebar({...props}) {
           <View>
             <View style={Styles.drawer_user_profile_pic_container}>
               <View style={Styles.profile_picture_container}>
-                <Image
-                  style={Styles.profile_picture}
-                  source={{uri: props.imageUri}}
-                />
+                {props.imageUri != '' ? (
+                  <Image
+                    style={Styles.profile_picture}
+                    source={{uri: props.imageUri}}
+                  />
+                ) : null}
               </View>
+
               <View style={Styles.user_name_container}>
                 <Text style={Styles.user_name_styling}>
                   {props.username.substring(0, props.username.indexOf('@'))}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    props.navigation.navigate('Profile');
-                  }}
-                  style={{flexDirection: 'row', justifyContent: 'center'}}>
-                  <View style={Styles.profile_edit_button}>
-                    <Text
-                      style={{
-                        alignSelf: 'center',
-                        color: 'white',
-                        fontFamily: 'Comfortaa-Regular',
-                        fontSize: 10,
-                        paddingBottom: 2,
-                      }}>
-                      Edit
-                    </Text>
-                  </View>
-                  <AntDesign
-                    style={{alignSelf: 'center', marginTop: 8, marginLeft: 5}}
-                    color="white"
-                    name="edit"
-                    size={18}
-                  />
-                </TouchableOpacity>
+                {props.info == null ? (
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.navigation.navigate('Edit profile');
+                    }}
+                    style={{flexDirection: 'row', justifyContent: 'center'}}>
+                    <View style={Styles.profile_edit_button}>
+                      <Text
+                        style={{
+                          alignSelf: 'center',
+                          color: 'white',
+                          fontFamily: 'Comfortaa-Regular',
+                          fontSize: 10,
+                          paddingBottom: 2,
+                        }}>
+                        Edit
+                      </Text>
+                    </View>
+                    <AntDesign
+                      style={{alignSelf: 'center', marginTop: 8, marginLeft: 5}}
+                      color="white"
+                      name="edit"
+                      size={18}
+                    />
+                  </TouchableOpacity>
+                ) : null}
               </View>
             </View>
           </View>

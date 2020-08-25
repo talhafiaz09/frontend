@@ -289,7 +289,9 @@ class RecipeDetails extends Component {
                 fullStarColor={'green'}
               />
               <Text style={Styles.rating_text}>
+                {'('}
                 {this.props.route.params.rating}
+                {')'}
               </Text>
             </View>
             <View style={Styles.heart_styling}>

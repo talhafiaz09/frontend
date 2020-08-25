@@ -41,6 +41,7 @@ class ProfileScreen extends Component {
     this.state = {
       textfield_input_change_check: false,
       profilepictureBase64: '',
+      profilepicture: '',
       username: '',
       password: '',
       confirm_password: '',
@@ -72,7 +73,8 @@ class ProfileScreen extends Component {
       .then((profilepicture) => {
         console.log(profilepicture);
         this.setState({
-          profilepictureBase64: profilepicture.data,
+          profilepictureBase64: 'data:image/png;base64,' + profilepicture.data,
+          profilepicture: profilepicture.data,
           contentType: profilepicture.mime,
           imageUri: profilepicture.path,
         });
@@ -154,13 +156,101 @@ class ProfileScreen extends Component {
       profilepicture = 'data:image/png;base64,' + profilepicture;
       this.setState({
         username: email,
-        imageUri: profilepicture,
+        profilepictureBase64: profilepicture,
       });
-      console.log(profilepicture);
     } catch (err) {}
   }
   UNSAFE_componentWillMount() {
     this.getUserInfo();
+  }
+  async setUserInfo() {
+    try {
+      await AsyncStorage.setItem('profilepicture', this.state.profilepicture);
+    } catch (err) {}
+  }
+  updateUser() {
+    if (this.state.password.length == 0) {
+      this.setState({
+        toast_show: true,
+      });
+      toast_type = 'error';
+      toast_text = 'Enter old password to continue';
+    } else if (
+      this.state.confirm_password.length < 8 &&
+      this.state.confirm_password.length > 0
+    ) {
+      this.setState({
+        toast_show: true,
+      });
+      toast_type = 'error';
+      toast_text = 'Weak new password';
+    } else {
+      if (this.state.confirm_password.length == 0) {
+        this.state.confirm_password = this.state.password;
+      }
+      fetch(FETCH_URL.IP + '/user/updateuser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: this.state.username.toLowerCase(),
+          oldpassword: this.state.password,
+          newpassword: this.state.confirm_password,
+          profilepicture: this.state.profilepicture,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.password) {
+            this.setUserInfo();
+            toast_type = 'success';
+            toast_text = 'Profile updated';
+            this.setState({
+              toast_show: true,
+            });
+            setTimeout(() => {
+              this.setState({
+                toast_show: false,
+                typing_animation_button: false,
+                disable_button: false,
+              });
+            }, 300);
+          } else if (!data.success && !data.password) {
+            toast_type = 'error';
+            toast_text = 'Wrong old password';
+            this.setState({
+              toast_show: true,
+            });
+            setTimeout(() => {
+              this.setState({
+                toast_show: false,
+                typing_animation_button: false,
+                disable_button: false,
+              });
+            }, 300);
+          }
+        })
+        .catch((error) => {
+          if (
+            error.message === 'Timeout' ||
+            error.message === 'Network request failed'
+          ) {
+            this.setState({
+              toast_show: true,
+            });
+            toast_type = 'error';
+            toast_text = 'Network failure';
+          }
+          setTimeout(() => {
+            this.setState({
+              toast_show: false,
+              typing_animation_button: false,
+              disable_button: false,
+            });
+          }, 300);
+        });
+    }
   }
   render() {
     return (
@@ -220,10 +310,10 @@ class ProfileScreen extends Component {
                 Styles.signup_screen_image_container,
                 {transform: [{scale: this.state.animationPressPicture}]},
               ]}>
-              {this.state.imageUri != '' ? (
+              {this.state.profilepictureBase64 != '' ? (
                 <Image
                   style={Styles.signup_screen_image_uploader}
-                  source={{uri: this.state.imageUri}}
+                  source={{uri: this.state.profilepictureBase64}}
                 />
               ) : null}
             </Animated.View>
@@ -323,6 +413,33 @@ class ProfileScreen extends Component {
               )}
             </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            disabled={this.state.disable_button ? true : false}
+            onPress={() => {
+              this.setState({
+                typing_animation_button: true,
+                disable_button: true,
+              });
+              this.updateUser();
+            }}>
+            <Animated.View
+              style={[Styles.login_screen_buttons_container, {width: '100%'}]}>
+              <LinearGradient
+                colors={['#EF5350', '#F44336']}
+                style={Styles.login_screen_buttons_container_linear_gradient}>
+                {this.state.typing_animation_button ? (
+                  show_typing_animation_button()
+                ) : (
+                  <Text
+                    style={
+                      Styles.login_screen_buttons_container_linear_gradient_text
+                    }>
+                    Update
+                  </Text>
+                )}
+              </LinearGradient>
+            </Animated.View>
+          </TouchableOpacity>
         </Animatable.View>
       </View>
     );

@@ -403,13 +403,13 @@ const Styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     elevation: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
+    // shadowColor: '#000',
+    // shadowOffset: {
+    //   width: 0,
+    //   height: 2,
+    // },
+    // shadowOpacity: 0.25,
+    // shadowRadius: 3.84,
   },
   pantries_list_view_header_text: {
     fontFamily: 'Comfortaa-Bold',

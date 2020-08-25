@@ -152,6 +152,7 @@ class ForgetPassword extends Component {
 
             <View style={Styles.nextButton}>
               <TouchableOpacity
+                style={{height: '100%', justifyContent: 'center'}}
                 disabled={this.state.isDisabled}
                 onPress={() => {
                   this.setState({

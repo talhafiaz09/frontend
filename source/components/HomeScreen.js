@@ -14,10 +14,22 @@ class HomeScreen extends Component {
     this.state = {
       username: '',
       imageUri: '',
+      info: null,
     };
   }
   UNSAFE_componentWillMount() {
     this.getUserInfo();
+    this.getExtraInfo();
+  }
+  async getExtraInfo() {
+    try {
+      var info_ = await AsyncStorage.getItem('f_g_user');
+      this.setState({
+        info: info_,
+      });
+    } catch (err) {}
+    console.log(this.state.info);
+    console.log('here');
   }
   async getUserInfo() {
     try {
@@ -28,7 +40,6 @@ class HomeScreen extends Component {
         username: email,
         imageUri: profilepicture,
       });
-      console.log(profilepicture);
     } catch (err) {}
   }
   async clearAsyncStorage() {
@@ -49,6 +60,7 @@ class HomeScreen extends Component {
             {...props}
             username={this.state.username}
             imageUri={this.state.imageUri}
+            info={this.state.info}
             clearAsyncStorage={this.clearAsyncStorage}
           />
         )}>
@@ -61,15 +73,17 @@ class HomeScreen extends Component {
             ),
           }}
         />
-        <Drawer.Screen
-          name="Profile"
-          component={this.Profile}
-          options={{
-            drawerIcon: ({color}) => (
-              <AntDesign color={color} name="user" size={20} />
-            ),
-          }}
-        />
+        {this.state.info == null ? (
+          <Drawer.Screen
+            name="Edit profile"
+            component={this.Profile}
+            options={{
+              drawerIcon: ({color}) => (
+                <AntDesign color={color} name="user" size={20} />
+              ),
+            }}
+          />
+        ) : null}
         <Drawer.Screen
           name="Add recipe"
           component={this.Setting}

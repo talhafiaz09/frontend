@@ -185,9 +185,6 @@ class LoginScreen extends Component {
               disable_button: false,
             });
           }
-          this.setState({
-            toast_show: false,
-          });
         })
         .catch((error) => {
           if (
@@ -204,6 +201,11 @@ class LoginScreen extends Component {
             toast_show: false,
           });
         });
+      setTimeout(() => {
+        this.setState({
+          toast_show: false,
+        });
+      }, 250);
     }
   }
   save_to_AsyncStorage() {
@@ -273,7 +275,11 @@ class LoginScreen extends Component {
       });
     this.facebook_google_fetch_request();
   }
+  extraInfo() {
+    AsyncStorage.setItem('f_g_user', 'yes');
+  }
   facebook_google_fetch_request() {
+    this.extraInfo();
     fetch(FETCH_URL.IP + '/user/signup', {
       method: 'POST',
       headers: {
@@ -427,10 +433,12 @@ class LoginScreen extends Component {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.success) {
+          if (data.success && data.found) {
             console.log(data.code);
             this.setState({
               toast_show: false,
+              typing_animation_button: false,
+              disable_button: false,
             });
             setTimeout(() => {
               this.props.navigation.navigate('Forgetpassword', {
@@ -438,6 +446,12 @@ class LoginScreen extends Component {
                 username: this.state.username,
               });
             }, 500);
+          } else if (!data.success && !data.found) {
+            toast_type = 'error';
+            toast_text = "User doesn't exist";
+            this.setState({
+              toast_show: true,
+            });
           } else {
             this.setState({
               toast_show: true,
@@ -564,6 +578,10 @@ class LoginScreen extends Component {
           </View>
           <TouchableOpacity
             onPress={() => {
+              this.setState({
+                typing_animation_button: true,
+                disable_button: true,
+              });
               this.getCode();
             }}>
             <Text style={Styles.login_screen_forget_password}>

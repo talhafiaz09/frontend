@@ -322,7 +322,7 @@ class Pantry extends Component {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{marginLeft: 15}}
+                style={{marginLeft: 6}}
                 onPress={() => {
                   this.setState({
                     showchangenamemodal: true,
@@ -336,7 +336,7 @@ class Pantry extends Component {
                 />
               </TouchableOpacity>
               <TouchableOpacity
-                style={{marginLeft: 15}}
+                style={{marginLeft: 6}}
                 onPress={() => {
                   this.props.navigation.navigate('Recipe', {
                     pantryid: this.state.userpantriesid[key],
@@ -369,7 +369,7 @@ class Pantry extends Component {
                     });
                   }
                 }}
-                style={{marginLeft: 15}}>
+                style={{marginLeft: 6}}>
                 <MaterialCommunityIcons
                   color="black"
                   name={this.labelName[key]}

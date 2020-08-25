@@ -36,6 +36,7 @@ class IngredientsList extends Component {
       dairy_ingredients: [],
       vegetables_ingredients: [],
       fruits_ingredients: [],
+      baking_grains_ingredients: [],
       userpantries: '',
       userpantriesname: [],
       userpantriesid: [],
@@ -50,6 +51,7 @@ class IngredientsList extends Component {
       vegetables_ingredient_container_dropdown_clicked: false,
       // fruits_ingredient_container_height: new Animated.Value(150),
       fruits_ingredient_container_dropdown_clicked: false,
+      baking_ingredient_container_dropdown_clicked: false,
     };
   }
   async fetchUserPantries() {
@@ -131,6 +133,10 @@ class IngredientsList extends Component {
             } else if (data.Ingredients[i].name == 'Fruits') {
               this.setState({
                 fruits_ingredients: data.Ingredients[i].ingredients,
+              });
+            } else if (data.Ingredients[i].name == 'Baking & Grains') {
+              this.setState({
+                baking_grains_ingredients: data.Ingredients[i].ingredients,
               });
             }
           }
@@ -353,6 +359,29 @@ class IngredientsList extends Component {
           onPress={() => {
             this.setState({
               ingredientName: this.state.fruits_ingredients[key],
+              showPantryLoading: true,
+              show_model: true,
+            });
+            this.fetchUserPantries();
+            console.log(key);
+          }}>
+          <View style={Styles.ingredients_view_list_styling}>
+            <Text style={Styles.ingredients_view_list_text_styling}>
+              {data}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      );
+    });
+  }
+  view_baking_grains_ingredients() {
+    return this.state.baking_grains_ingredients.map((data, key) => {
+      return (
+        <TouchableOpacity
+          key={data}
+          onPress={() => {
+            this.setState({
+              ingredientName: this.state.baking_grains_ingredients[key],
               showPantryLoading: true,
               show_model: true,
             });
@@ -769,6 +798,83 @@ class IngredientsList extends Component {
                     </View>
                   ) : (
                     this.view_fruits_ingredients()
+                  )}
+                </View>
+              </Animated.View>
+            </View>
+            <View
+              style={[Styles.ingredients_view_list_container, {marginTop: 30}]}>
+              <View style={Styles.ingredients_view_list_container_header}>
+                <View
+                  style={Styles.ingredients_view_list_container_header_picture}>
+                  <Image source={require('../assets/images/baking.png')} />
+                </View>
+                <View style={{flex: 1}}>
+                  <Text style={{marginLeft: 10, fontFamily: 'Comfortaa-Bold'}}>
+                    Baking {'&'} Grains
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    if (
+                      this.state.baking_ingredient_container_dropdown_clicked
+                    ) {
+                      this.refs['bakingfooter'].setNativeProps({
+                        height: 100,
+                      });
+                      this.setState({
+                        baking_ingredient_container_dropdown_clicked: false,
+                      });
+                    } else {
+                      this.refs['bakingfooter'].setNativeProps({
+                        height: 'auto',
+                      });
+                      this.setState({
+                        baking_ingredient_container_dropdown_clicked: true,
+                      });
+                    }
+                  }}>
+                  <View style={{marginRight: 10}}>
+                    {this.state.baking_ingredient_container_dropdown_clicked ? (
+                      <MaterialCommunityIcons
+                        color="black"
+                        name="chevron-up-box"
+                        size={35}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        color="black"
+                        name="chevron-down-box"
+                        size={35}
+                      />
+                    )}
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <Animated.View
+                ref={'bakingfooter'}
+                style={{
+                  padding: 10,
+                  height: 100,
+                  overflow: 'hidden',
+                }}>
+                <View
+                  style={{
+                    flexWrap: 'wrap',
+                    flexDirection: 'row',
+                  }}>
+                  {this.state.isLoading ? (
+                    <View
+                      style={{
+                        height: 80,
+                        width: '100%',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      {show_loading_animation_ingredients()}
+                    </View>
+                  ) : (
+                    this.view_baking_grains_ingredients()
                   )}
                 </View>
               </Animated.View>

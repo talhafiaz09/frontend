@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React, {Component} from 'react';
 import {View, TouchableWithoutFeedback} from 'react-native';
 import Styles from '../style/StyleSheet';
+import AsyncStorage from '@react-native-community/async-storage';
 import IngredientsList from '../components/IngredientsList';
 import Pantry from '../components/Pantry';
 import Recipe from '../components/Recipe';
@@ -16,7 +17,7 @@ class HomeScreenNavigation extends Component {
   render() {
     return (
       <Tabs.Navigator
-        initialRouteName="Pantry"
+        // initialRouteName="Pantry"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,
