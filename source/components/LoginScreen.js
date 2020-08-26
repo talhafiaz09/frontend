@@ -451,6 +451,8 @@ class LoginScreen extends Component {
             toast_text = "User doesn't exist";
             this.setState({
               toast_show: true,
+              typing_animation_button: false,
+              disable_button: false,
             });
           } else {
             this.setState({

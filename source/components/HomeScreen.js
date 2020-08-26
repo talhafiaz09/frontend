@@ -73,17 +73,16 @@ class HomeScreen extends Component {
             ),
           }}
         />
-        {this.state.info == null ? (
-          <Drawer.Screen
-            name="Edit profile"
-            component={this.Profile}
-            options={{
-              drawerIcon: ({color}) => (
-                <AntDesign color={color} name="user" size={20} />
-              ),
-            }}
-          />
-        ) : null}
+        {/* {this.state.info == null || this.state.info == '' ? ( */}
+        <Drawer.Screen
+          name="Edit profile"
+          component={this.Profile}
+          options={{
+            drawerIcon: ({color}) => (
+              <AntDesign color={color} name="user" size={20} />
+            ),
+          }}
+        />
         <Drawer.Screen
           name="Add recipe"
           component={this.Setting}
