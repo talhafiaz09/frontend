@@ -34,7 +34,6 @@ var toast_text = '';
 class Pantry extends Component {
   constructor(props) {
     super(props);
-    this.isFooterOpen = [];
     this.labelName = [];
     this.state = {
       toast_show: false,
@@ -46,6 +45,7 @@ class Pantry extends Component {
       userpantriesname: [],
       userpantriesningredients: [],
       userpantriesid: [],
+      pantry_footer_opened: [],
       loading_animation: true,
       disable_button: false,
       typing_animation_button: false,
@@ -77,16 +77,14 @@ class Pantry extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          // console.log(data);
-          this.setState({
-            userpantries: data.Pantry,
-          });
-          for (var i = 0; i < this.state.userpantries.length; i++) {
-            this.state.userpantriesname.push(this.state.userpantries[i].name);
+          console.log(data);
+          for (var i = 0; i < data.Pantry.length; i++) {
+            this.state.pantry_footer_opened.push(false);
+            this.state.userpantriesid.push(data.Pantry[i]._id);
+            this.state.userpantriesname.push(data.Pantry[i].name);
             this.state.userpantriesningredients.push(
-              this.state.userpantries[i].ingredients,
+              data.Pantry[i].ingredients,
             );
-            this.state.userpantriesid.push(this.state.userpantries[i]._id);
           }
         } else {
           console.log(data);
@@ -148,9 +146,10 @@ class Pantry extends Component {
         userpantriesname: [],
         userpantriesningredients: [],
         userpantriesid: [],
+        pantry_footer_opened: [],
       });
-      this.isFooterOpen = [];
-      fetch(FETCH_URL.IP + '/pantry/addIngredients', {
+
+      fetch(FETCH_URL.IP + '/pantry/addPantry', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,20 +204,23 @@ class Pantry extends Component {
       this.toogletoast();
     }, 500);
   }
-  deletePantry(pantryid) {
+  deletePantry(key) {
     this.setState({
       loading_animation: true,
       userpantries: [],
       userpantriesname: [],
       userpantriesningredients: [],
       userpantriesid: [],
+      pantry_footer_opened: [],
     });
-    this.isFooterOpen = [];
-    fetch(FETCH_URL.IP + '/pantry/userallpantries/' + pantryid, {
-      method: 'DELETE',
+    fetch(FETCH_URL.IP + '/pantry/deletePantry', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        key: this.state.userpantriesid[key],
+      }),
     })
       .then((res) => res.json())
       .then((data) => {
@@ -288,17 +290,6 @@ class Pantry extends Component {
       roundButtonSize: new Animated.Value(width - 200),
     });
   }
-  pushFalseValues() {
-    this.isFooterOpen.push(false);
-    this.labelName.push('chevron-down-box');
-  }
-  getlabelName(key) {
-    if (this.isFooterOpen[key]) {
-      this.labelName[key] = 'chevron-up-box';
-    } else {
-      this.labelName[key] = 'chevron-down-box';
-    }
-  }
   view_user_pantries() {
     var keys = 0;
     var array = [];
@@ -306,14 +297,14 @@ class Pantry extends Component {
       keys++;
       return (
         <View key={keys} style={Styles.pantries_list_view}>
-          {this.pushFalseValues()}
-          {this.getlabelName(key)}
+          {/* {this.pushFalseValues()}
+          {this.getlabelName(key)} */}
           <View style={Styles.pantries_list_view_header}>
             <Text style={Styles.pantries_list_view_header_text}>{data}</Text>
             <View style={Styles.pantries_list_view_header_icons}>
               <TouchableOpacity
                 onPress={() => {
-                  this.deletePantry(this.state.userpantriesid[key]);
+                  this.deletePantry(key);
                 }}>
                 <MaterialCommunityIcons
                   color="#f04a2c"
@@ -351,30 +342,40 @@ class Pantry extends Component {
               <TouchableOpacity
                 key={keys}
                 onPress={() => {
-                  if (this.isFooterOpen[key]) {
-                    this.isFooterOpen[key] = false;
-                    this.labelName[key] = 'chevron-down-box';
+                  if (this.state.pantry_footer_opened[key]) {
                     this.refs['footer' + key].setNativeProps({
-                      borderTopWidth: 0,
                       height: 0,
                     });
+                    var array = this.state.pantry_footer_opened;
+                    array[key] = false;
+                    this.setState({
+                      pantry_footer_opened: [...array],
+                    });
                   } else {
-                    this.isFooterOpen[key] = true;
-                    this.labelName[key] = 'chevron-up-box';
-
                     this.refs['footer' + key].setNativeProps({
-                      borderTopColor: 'white',
-                      borderTopWidth: 3,
                       height: 'auto',
+                    });
+                    var array = this.state.pantry_footer_opened;
+                    array[key] = true;
+                    this.setState({
+                      pantry_footer_opened: [...array],
                     });
                   }
                 }}
                 style={{marginLeft: 6}}>
-                <MaterialCommunityIcons
-                  color="black"
-                  name={this.labelName[key]}
-                  size={30}
-                />
+                {this.state.pantry_footer_opened[key] ? (
+                  <MaterialCommunityIcons
+                    color="black"
+                    name="arrow-up"
+                    size={30}
+                  />
+                ) : (
+                  <MaterialCommunityIcons
+                    color="black"
+                    name="arrow-down"
+                    size={30}
+                  />
+                )}
               </TouchableOpacity>
             </View>
           </View>
@@ -423,14 +424,14 @@ class Pantry extends Component {
       );
     });
   }
-  async deleteIngredientFromSelectedPantry(pantryID, tobedeleted) {
+  async deleteIngredientFromSelectedPantry(id, tobedeleted) {
     this.setState({
       loading_animation: true,
     });
     await fetch(
       FETCH_URL.IP +
         '/pantry/deleteingredientfrompantry/' +
-        this.state.userpantriesid[pantryID],
+        this.state.userpantriesid[id],
       {
         method: 'PUT',
         headers: {
@@ -455,8 +456,8 @@ class Pantry extends Component {
             userpantriesname: [],
             userpantriesningredients: [],
             userpantriesid: [],
+            pantry_footer_opened: [],
           });
-          this.isFooterOpen = [];
           this.fetchUserPantries();
         } else {
           console.log(data);
@@ -603,8 +604,7 @@ class Pantry extends Component {
       </Modal>
     );
   }
-  updatePantryName(id) {
-    console.log(id);
+  updatePantryName(index) {
     this.setState({
       loading_animation: true,
     });
@@ -615,7 +615,7 @@ class Pantry extends Component {
       fetch(
         FETCH_URL.IP +
           '/pantry/updatepantryname/' +
-          this.state.userpantriesid[id],
+          this.state.userpantriesid[index],
         {
           method: 'PUT',
           headers: {
@@ -638,8 +638,8 @@ class Pantry extends Component {
               userpantriesname: [],
               userpantriesningredients: [],
               userpantriesid: [],
+              pantry_footer_opened: [],
             });
-            this.isFooterOpen = [];
             this.roundButtonAnimationSecond();
           } else {
             toast_type = 'error';

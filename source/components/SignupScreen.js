@@ -146,7 +146,7 @@ class SignupScreen extends Component {
       cropping: true,
     })
       .then((profilepicture) => {
-        console.log(profilepicture);
+        // console.log(profilepicture);
         this.setState({
           profilepictureBase64: profilepicture.data,
           contentType: profilepicture.mime,
@@ -219,7 +219,7 @@ class SignupScreen extends Component {
           this.setState({
             typing_animation_button: false,
           });
-          console.log(data);
+          // console.log(data);
           if (data.success) {
             this.props.navigation.replace('VerificationCodeScreen', {
               check: 'signup',

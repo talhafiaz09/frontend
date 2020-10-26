@@ -4,12 +4,12 @@ import {Animated} from 'react-native';
 import {TypingAnimation} from 'react-native-typing-animation';
 export const FETCH_URL = {
   //Phone
-  // IP: 'http://192.168.1.20:3000',
+  // IP: 'http://192.168.1.5:3000',
   //Emulator
   IP: 'http://10.0.2.2:3000',
 };
 export const width = Dimensions.get('screen').width;
-export const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const email_regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
 export function animationIn(value) {
   Animated.timing(value, {
     toValue: 0.5,

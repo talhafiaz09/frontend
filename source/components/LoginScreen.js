@@ -268,7 +268,7 @@ class LoginScreen extends Component {
         this.setState({
           profilepictureBase64: base64String,
         });
-        console.log(this.state.profilepictureBase64);
+        // console.log(this.state.profilepictureBase64);
       })
       .catch((err) => {
         console.log(err);
@@ -338,7 +338,7 @@ class LoginScreen extends Component {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
       if (userInfo) {
-        console.log(userInfo);
+        // console.log(userInfo);
         this.setState({
           username: userInfo.user.email,
         });
@@ -434,7 +434,7 @@ class LoginScreen extends Component {
         .then((res) => res.json())
         .then((data) => {
           if (data.success && data.found) {
-            console.log(data.code);
+            // console.log(data.code);
             this.setState({
               toast_show: false,
               typing_animation_button: false,

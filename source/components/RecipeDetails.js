@@ -10,7 +10,9 @@ import {
   Modal,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  BackHandler,
 } from 'react-native';
+import VideoPlayer from '../components/VideoPlayer';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
 import Styles from '../style/StyleSheet';
@@ -39,10 +41,17 @@ class RecipeDetails extends Component {
       useremail: '',
       isFavourite: false,
     };
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButton.bind(this),
+    );
   }
+  handleBackButton = () => {
+    // this.props.navigation.pop();
+  };
   componentDidMount() {
     this.get_email();
-    // this.addToFavouritesHandler();
+    this.addToFavouritesHandler();
   }
   async get_email() {
     try {
@@ -502,15 +511,35 @@ class RecipeDetails extends Component {
               <View>
                 {this.props.route.params.video == '' ||
                 this.props.route.params.video == null ? (
-                  <Text
-                    style={{
-                      alignSelf: 'center',
-                      fontFamily: 'Comfortaa-Medium',
-                      fontSize: 18,
+                  // <Text
+                  //   style={{
+                  //     alignSelf: 'center',
+                  //     fontFamily: 'Comfortaa-Medium',
+                  //     fontSize: 18,
+                  //   }}>
+                  //   Video not available.
+                  // </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Videoplayer', {
+                        navigation: this.props.navigation,
+                      });
                     }}>
-                    Video not available.
-                  </Text>
-                ) : null}
+                    <View>
+                      <Text>View Video</Text>
+                    </View>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={() => {
+                      // this.props.navigation.navigate('Videoplayer');
+                    }}>
+                    <View>
+                      <Text>View Video</Text>
+                      <Videoplayer />
+                    </View>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
             <View style={{marginBottom: 40}}></View>

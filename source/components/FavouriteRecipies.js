@@ -97,13 +97,10 @@ class FavoriteRecipies extends Component {
             iq = [];
           }
           this.setState({isLoading: false});
-          console.log(this.state.recipe_steps);
         } else {
-          console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -139,11 +136,9 @@ class FavoriteRecipies extends Component {
           toast_text = 'Removed from favourites';
           this.getFavouriteRecipies();
         } else {
-          console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -189,12 +184,10 @@ class FavoriteRecipies extends Component {
           }
           this.getFavouriteRecipiesDetails();
         } else {
-          console.log(data);
           this.setState({isLoading: false});
         }
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -231,7 +224,7 @@ class FavoriteRecipies extends Component {
             />
           </View>
           <View style={{width: '60%', height: '100%', padding: 10}}>
-            <View style={Styles.heart_styling_favourite}>
+            {/* <View style={Styles.heart_styling_favourite}>
               <TouchableOpacity
                 onPress={() => {
                   this.setState({isLoading: true});
@@ -239,7 +232,7 @@ class FavoriteRecipies extends Component {
                 }}>
                 <MaterialCommunityIcons color="red" name="heart" size={30} />
               </TouchableOpacity>
-            </View>
+            </View> */}
             <View style={{marginTop: 20, height: '5%'}}>
               <Text style={Styles.view_recipie_name}>
                 {this.state.recipe_names[key]}
@@ -294,7 +287,6 @@ class FavoriteRecipies extends Component {
     nutrition,
     video,
   ) {
-    console.log(ingredients);
     this.props.navigation.navigate('RecipeDetails', {
       id: id,
       name: name,

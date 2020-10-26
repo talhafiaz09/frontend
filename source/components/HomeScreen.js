@@ -28,8 +28,6 @@ class HomeScreen extends Component {
         info: info_,
       });
     } catch (err) {}
-    console.log(this.state.info);
-    console.log('here');
   }
   async getUserInfo() {
     try {

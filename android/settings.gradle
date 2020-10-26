@@ -1,4 +1,6 @@
 rootProject.name = 'MyFridge'
+include ':rn-floating-video-widget'
+project(':rn-floating-video-widget').projectDir = new File(rootProject.projectDir, '../node_modules/rn-floating-video-widget/android')
 include ':@react-native-community_google-signin'
 project(':@react-native-community_google-signin').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/google-signin/android')
 include ':react-native-firebase'

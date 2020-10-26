@@ -162,6 +162,7 @@ class Recipe extends Component {
       images: images,
       nutrition: nutrition,
       video: video,
+      navigation: this.props.navigation,
     });
   }
   mapRecommendedRecipies() {

@@ -13,10 +13,9 @@ class SplashScreen extends Component {
     };
     this.display_email();
     setTimeout(() => {
-      console.log(this.state.username);
+      // console.log(this.state.username);
       if (this.state.username == '' || this.state.username == null) {
         this.props.navigation.replace('Login');
-        // this.props.navigation.navigate('Login');
       } else {
         this.props.navigation.replace('Home');
       }

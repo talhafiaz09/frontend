@@ -12,6 +12,7 @@ import VerificationCodeScreen from '../components/VerificationCodeScreen';
 import ChangePasswordScreen from '../components/ChangePasswordScreen';
 import ForgetPassword from '../components/ForgetPassword';
 import RecipeDetails from '../components/RecipeDetails';
+import VideoPlayer from '../components/VideoPlayer';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
 import RecipeDetail from '../components/RecipeDetails';
@@ -80,6 +81,11 @@ class SplashToLogin extends Component {
             <Stack.Screen
               name="Changepasswordscreen"
               component={ChangePasswordScreen}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Videoplayer"
+              component={VideoPlayer}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

@@ -313,6 +313,7 @@ const Styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+    marginBottom: 30,
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -334,7 +335,6 @@ const Styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ingredients_view_list_styling: {
-    // backgroundColor: '#ffbf00',
     backgroundColor: '#ffd23a',
     margin: 3,
     borderRadius: 5,
@@ -403,13 +403,6 @@ const Styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     elevation: 5,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
   },
   pantries_list_view_header_text: {
     fontFamily: 'Comfortaa-Bold',
@@ -473,7 +466,7 @@ const Styles = StyleSheet.create({
   },
   pantries_list_view_text_ingredients_screen: {
     fontFamily: 'Comfortaa-Bold',
-    width: '80%',
+    width: '70%',
     color: 'black',
     alignSelf: 'center',
     marginLeft: 20,
@@ -492,6 +485,7 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
   },
   five_star_recipies: {
     height: 300,
@@ -741,6 +735,27 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     borderColor: '#ffffff',
     backgroundColor: '#ffffffff',
+  },
+  shopping_list_view: {
+    width: '100%',
+    marginTop: 10,
+    borderBottomColor: 'green',
+    borderBottomWidth: 1,
+    borderTopColor: 'green',
+    borderTopWidth: 1,
+    flexDirection: 'row',
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingLeft: 5,
+    paddingRight: 5,
+    marginBottom: 10,
+  },
+  shopping_list_view_text: {
+    fontFamily: 'Comfortaa-Bold',
+    width: '75%',
+    color: 'black',
+    alignSelf: 'center',
+    fontSize: 18,
   },
 });
 export default Styles;

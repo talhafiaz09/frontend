@@ -17,7 +17,7 @@ class HomeScreenNavigation extends Component {
   render() {
     return (
       <Tabs.Navigator
-        // initialRouteName="Pantry"
+        initialRouteName="Shopping List"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,
@@ -86,6 +86,7 @@ class HomeScreenNavigation extends Component {
           name="Shopping List"
           component={this.shopping_list}
           options={{
+            unmountOnBlur: true,
             tabBarIcon: ({color}) => (
               <MaterialCommunityIcons
                 color={color}

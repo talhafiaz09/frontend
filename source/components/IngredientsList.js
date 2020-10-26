@@ -23,7 +23,7 @@ import {
   FETCH_URL,
 } from '../functions/FunctionHandler';
 import {toast, callToast} from '../functions/Toast';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
 var toast_type = '';
 var toast_text = '';
 class IngredientsList extends Component {
@@ -33,32 +33,25 @@ class IngredientsList extends Component {
       username: '',
       isLoading: true,
       toast_show: false,
-      dairy_ingredients: [],
-      vegetables_ingredients: [],
-      fruits_ingredients: [],
-      baking_grains_ingredients: [],
+      ingredients_names: [],
+      ingredients_list: [],
+      ingredient_footer_opened: [],
+      ingredient_footer_height: [],
       userpantries: '',
+      userpantriesId: [],
       userpantriesname: [],
-      userpantriesid: [],
       ingredientKey: null,
       ingredientName: '',
       typing_animation_search_bar: false,
       show_model: false,
+      loading_animation: true,
       showPantryLoading: true,
-      // dairy_ingredient_container_height: new Animated.Value(150),
-      dairy_ingredient_container_dropdown_clicked: false,
-      // vegetables_ingredient_container_height: new Animated.Value(150),
-      vegetables_ingredient_container_dropdown_clicked: false,
-      // fruits_ingredient_container_height: new Animated.Value(150),
-      fruits_ingredient_container_dropdown_clicked: false,
-      baking_ingredient_container_dropdown_clicked: false,
     };
   }
   async fetchUserPantries() {
     this.setState({
-      userpantries: [],
+      userpantriesId: [],
       userpantriesname: [],
-      userpantriesid: [],
     });
     await fetch(
       FETCH_URL.IP + '/pantry/userallpantries/' + this.state.username,
@@ -72,26 +65,16 @@ class IngredientsList extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log(data);
-          this.setState({
-            userpantries: data.Pantry,
-          });
-          for (var i = 0; i < this.state.userpantries.length; i++) {
-            this.state.userpantriesid.push(this.state.userpantries[i]._id);
-            this.state.userpantriesname.push(this.state.userpantries[i].name);
+          for (var i = 0; i < data.Pantry.length; i++) {
+            this.state.userpantriesId.push(data.Pantry[i]._id);
+            this.state.userpantriesname.push(data.Pantry[i].name);
           }
-          this.setState({
-            showPantryLoading: false,
-          });
-        } else {
-          console.log(data);
           this.setState({
             showPantryLoading: false,
           });
         }
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -116,31 +99,15 @@ class IngredientsList extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          // this.setState({
-          //   toast_show: true,
-          // });
-          // toast_type = 'success';
-          // toast_text = 'Ingredients added!!';
           for (i = 0; i < data.Ingredients.length; i++) {
-            if (data.Ingredients[i].name == 'Dairy') {
-              this.setState({
-                dairy_ingredients: data.Ingredients[i].ingredients,
-              });
-            } else if (data.Ingredients[i].name == 'Vegetables') {
-              this.setState({
-                vegetables_ingredients: data.Ingredients[i].ingredients,
-              });
-            } else if (data.Ingredients[i].name == 'Fruits') {
-              this.setState({
-                fruits_ingredients: data.Ingredients[i].ingredients,
-              });
-            } else if (data.Ingredients[i].name == 'Baking & Grains') {
-              this.setState({
-                baking_grains_ingredients: data.Ingredients[i].ingredients,
-              });
-            }
+            this.state.ingredient_footer_opened.push(false);
+            this.state.ingredient_footer_height.push(100);
+            this.state.ingredients_names.push(data.Ingredients[i].name);
+            this.state.ingredients_list.push(data.Ingredients[i].ingredients);
           }
-          this.setState({isLoading: false});
+          this.setState({
+            loading_animation: false,
+          });
         } else {
           // this.setState({
           //   toast_show: true,
@@ -150,7 +117,6 @@ class IngredientsList extends Component {
         }
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -165,70 +131,11 @@ class IngredientsList extends Component {
       });
     }, 500);
   }
-  // increase_container_height(value) {
-  //   if (value == 'Dairy') {
-  //     if (!this.state.dairy_ingredient_container_dropdown_clicked) {
-  //       Animated.timing(this.state.dairy_ingredient_container_height, {
-  //         toValue: 700,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({dairy_ingredient_container_dropdown_clicked: true});
-  //     } else {
-  //       Animated.timing(this.state.dairy_ingredient_container_height, {
-  //         toValue: 150,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({dairy_ingredient_container_dropdown_clicked: false});
-  //     }
-  //   } else if (value == 'Vegetables') {
-  //     if (!this.state.vegetables_ingredient_container_dropdown_clicked) {
-  //       Animated.timing(this.state.vegetables_ingredient_container_height, {
-  //         toValue: 700,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({vegetables_ingredient_container_dropdown_clicked: true});
-  //     } else {
-  //       Animated.timing(this.state.vegetables_ingredient_container_height, {
-  //         toValue: 150,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({
-  //         vegetables_ingredient_container_dropdown_clicked: false,
-  //       });
-  //     }
-  //   } else if (value == 'Fruits') {
-  //     if (!this.state.fruits_ingredient_container_dropdown_clicked) {
-  //       Animated.timing(this.state.fruits_ingredient_container_height, {
-  //         toValue: 700,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({fruits_ingredient_container_dropdown_clicked: true});
-  //     } else {
-  //       Animated.timing(this.state.fruits_ingredient_container_height, {
-  //         toValue: 150,
-  //         duration: 400,
-  //         useNativeDriver: false,
-  //       }).start();
-  //       this.setState({
-  //         fruits_ingredient_container_dropdown_clicked: false,
-  //       });
-  //     }
-  //   }
-  //   this.setState({toast_show: false});
-  // }
   componentDidMount() {
     this.display_email();
     setTimeout(() => {
       this.fetch_ingredients();
     }, 1000);
-    // setTimeout(() => {
-    //   this.fetchUserPantries();
-    // }, 1500);
   }
   toogle_typing_animation_search_bar() {
     if (this.state.typing_animation_search_bar) {
@@ -245,7 +152,7 @@ class IngredientsList extends Component {
     fetch(
       FETCH_URL.IP +
         '/pantry/addingingredienttopantry/' +
-        this.state.userpantriesid[pantryKey],
+        this.state.userpantriesId[pantryKey],
       {
         method: 'PUT',
         headers: {
@@ -288,7 +195,6 @@ class IngredientsList extends Component {
         });
       })
       .catch((error) => {
-        console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -303,98 +209,67 @@ class IngredientsList extends Component {
       });
     this.setState({
       toast_show: false,
+      ingredientName: null,
     });
   }
-  view_dairy_ingredients() {
-    return this.state.dairy_ingredients.map((data, key) => {
-      return (
-        <TouchableOpacity
-          key={data}
-          onPress={() => {
+  addtoShoppingList() {
+    fetch(FETCH_URL.IP + '/shoppinglist/addtoshoppinglist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        ingredientname: this.state.ingredientName,
+        useremail: this.state.username,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          toast_type = 'success';
+          toast_text = 'Ingredient added!!';
+          this.setState({
+            toast_show: true,
+          });
+        } else {
+          if (data.status == 'Ingredient exist') {
+            toast_type = 'error';
+            toast_text = 'Ingredient already exist';
             this.setState({
-              ingredientName: this.state.dairy_ingredients[key],
-              showPantryLoading: true,
-              show_model: true,
+              toast_show: true,
             });
-            this.fetchUserPantries();
-            console.log(key);
-          }}>
-          <View style={Styles.ingredients_view_list_styling}>
-            <Text style={Styles.ingredients_view_list_text_styling}>
-              {data}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    });
-  }
-  view_vegetable_ingredients() {
-    return this.state.vegetables_ingredients.map((data, key) => {
-      return (
-        <TouchableOpacity
-          key={data}
-          onPress={() => {
+          } else {
+            toast_type = 'error';
+            toast_text = 'Ingredient not added!!';
             this.setState({
-              ingredientName: this.state.vegetables_ingredients[key],
-              showPantryLoading: true,
-              show_model: true,
+              toast_show: true,
             });
-            this.fetchUserPantries();
-            console.log(key);
-          }}>
-          <View style={Styles.ingredients_view_list_styling}>
-            <Text style={Styles.ingredients_view_list_text_styling}>
-              {data}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    });
-  }
-  view_fruits_ingredients() {
-    return this.state.fruits_ingredients.map((data, key) => {
-      return (
-        <TouchableOpacity
-          key={data}
-          onPress={() => {
-            this.setState({
-              ingredientName: this.state.fruits_ingredients[key],
-              showPantryLoading: true,
-              show_model: true,
-            });
-            this.fetchUserPantries();
-            console.log(key);
-          }}>
-          <View style={Styles.ingredients_view_list_styling}>
-            <Text style={Styles.ingredients_view_list_text_styling}>
-              {data}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
-    });
-  }
-  view_baking_grains_ingredients() {
-    return this.state.baking_grains_ingredients.map((data, key) => {
-      return (
-        <TouchableOpacity
-          key={data}
-          onPress={() => {
-            this.setState({
-              ingredientName: this.state.baking_grains_ingredients[key],
-              showPantryLoading: true,
-              show_model: true,
-            });
-            this.fetchUserPantries();
-            console.log(key);
-          }}>
-          <View style={Styles.ingredients_view_list_styling}>
-            <Text style={Styles.ingredients_view_list_text_styling}>
-              {data}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      );
+          }
+          this.setState({
+            toast_show: false,
+          });
+        }
+        this.setState({
+          toast_show: false,
+          show_model: false,
+        });
+      })
+      .catch((error) => {
+        if ('Timeout' || 'Network request failed') {
+          this.setState({
+            toast_show: true,
+          });
+          toast_type = 'error';
+          toast_text = 'Network failure';
+        }
+        this.setState({
+          toast_show: false,
+          show_model: false,
+        });
+      });
+    this.setState({
+      toast_show: false,
+      ingredientName: null,
     });
   }
   async display_email() {
@@ -416,9 +291,19 @@ class IngredientsList extends Component {
             <View style={Styles.pantries_list_view_ingredients_header_icons}>
               <TouchableOpacity
                 onPress={() => {
+                  this.addtoShoppingList();
+                }}>
+                <MaterialCommunityIcons
+                  color="green"
+                  name="cart-plus"
+                  size={30}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
                   this.addtoPantry(key);
                 }}>
-                <MaterialCommunityIcons color="green" name="plus" size={30} />
+                <MaterialCommunityIcons color="black" name="plus" size={30} />
               </TouchableOpacity>
             </View>
           </View>
@@ -426,6 +311,89 @@ class IngredientsList extends Component {
       );
     });
   }
+  view_ingredients_list = ({item, index}) => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this.setState({
+            ingredientName: item,
+            show_model: true,
+          });
+          this.fetchUserPantries();
+        }}>
+        <View style={Styles.ingredients_view_list_styling}>
+          <Text style={Styles.ingredients_view_list_text_styling}>{item}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  mapIngredients = ({item, index}) => {
+    return (
+      <View style={Styles.ingredients_view_list_container}>
+        <View style={Styles.ingredients_view_list_container_header}>
+          <View style={Styles.ingredients_view_list_container_header_picture}>
+            <Image source={require('../assets/images/dairy.png')} />
+          </View>
+          <View style={{flex: 1}}>
+            <Text style={{marginLeft: 10, fontFamily: 'Comfortaa-Bold'}}>
+              {item}
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => {
+              var array1 = this.state.ingredient_footer_opened;
+              var array2 = this.state.ingredient_footer_height;
+              if (this.state.ingredient_footer_opened[index]) {
+                array1[index] = false;
+                array2[index] = 100;
+                this.setState({ingredient_footer_opened: [...array1]});
+                this.setState({ingredient_footer_height: [...array2]});
+              } else {
+                array1[index] = true;
+                array2[index] = 'auto';
+                this.setState({ingredient_footer_opened: [...array1]});
+                this.setState({ingredient_footer_height: [...array2]});
+              }
+            }}>
+            <View style={{marginRight: 10}}>
+              {this.state.ingredient_footer_opened[index] ? (
+                <MaterialCommunityIcons
+                  color="black"
+                  name="arrow-up"
+                  size={30}
+                />
+              ) : (
+                <MaterialCommunityIcons
+                  color="black"
+                  name="arrow-down"
+                  size={30}
+                />
+              )}
+            </View>
+          </TouchableOpacity>
+        </View>
+        <Animated.View
+          style={{
+            padding: 10,
+            height: this.state.ingredient_footer_height[index],
+            overflow: 'hidden',
+          }}>
+          <FlatList
+            columnWrapperStyle={{flexWrap: 'wrap', flex: 1}}
+            // contentContainerStyle={{flexDirection: 'row', flexWrap: 'wrap'}}
+            horizontal={false}
+            numColumns={3}
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={this.state.ingredients_list[index]}
+            renderItem={this.view_ingredients_list}
+            keyExtractor={(item, index) => index.toString()}
+            extraData={index}
+          />
+        </Animated.View>
+      </View>
+    );
+  };
   render() {
     return (
       <View style={Styles.main_container}>
@@ -565,322 +533,27 @@ class IngredientsList extends Component {
           duration={1500}
           animation="bounceInUp"
           style={Styles.home_screens_bottom}>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <View style={Styles.ingredients_view_list_container}>
-              <View style={Styles.ingredients_view_list_container_header}>
-                <View
-                  style={Styles.ingredients_view_list_container_header_picture}>
-                  <Image source={require('../assets/images/dairy.png')} />
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={{marginLeft: 10, fontFamily: 'Comfortaa-Bold'}}>
-                    Dairy ingredients
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      this.state.dairy_ingredient_container_dropdown_clicked
-                    ) {
-                      this.refs['dairyfooter'].setNativeProps({
-                        height: 100,
-                      });
-                      this.setState({
-                        dairy_ingredient_container_dropdown_clicked: false,
-                      });
-                    } else {
-                      this.refs['dairyfooter'].setNativeProps({
-                        height: 'auto',
-                      });
-                      this.setState({
-                        dairy_ingredient_container_dropdown_clicked: true,
-                      });
-                    }
-                  }}>
-                  <View style={{marginRight: 10}}>
-                    {this.state.dairy_ingredient_container_dropdown_clicked ? (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-up-box"
-                        size={35}
-                      />
-                    ) : (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-down-box"
-                        size={35}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Animated.View
-                ref={'dairyfooter'}
-                style={{
-                  padding: 10,
-                  height: 100,
-                  overflow: 'hidden',
-                }}>
-                <View
-                  style={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                  }}>
-                  {this.state.isLoading ? (
-                    <View
-                      style={{
-                        height: 80,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {show_loading_animation_ingredients()}
-                    </View>
-                  ) : (
-                    this.view_dairy_ingredients()
-                  )}
-                </View>
-              </Animated.View>
-            </View>
+          {this.state.loading_animation ? (
             <View
-              style={[Styles.ingredients_view_list_container, {marginTop: 30}]}>
-              <View style={Styles.ingredients_view_list_container_header}>
-                <View
-                  style={Styles.ingredients_view_list_container_header_picture}>
-                  <Image source={require('../assets/images/vegetable.png')} />
-                </View>
-                <View style={{flex: 1}}>
-                  <Text
-                    style={{
-                      marginLeft: 10,
-                      fontFamily: 'Comfortaa-Bold',
-                    }}>
-                    Vegetables
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      this.state
-                        .vegetables_ingredient_container_dropdown_clicked
-                    ) {
-                      this.refs['vegetablefooter'].setNativeProps({
-                        height: 100,
-                      });
-                      this.setState({
-                        vegetables_ingredient_container_dropdown_clicked: false,
-                      });
-                    } else {
-                      this.refs['vegetablefooter'].setNativeProps({
-                        height: 'auto',
-                      });
-                      this.setState({
-                        vegetables_ingredient_container_dropdown_clicked: true,
-                      });
-                    }
-                  }}>
-                  <View style={{marginRight: 10}}>
-                    {this.state
-                      .vegetables_ingredient_container_dropdown_clicked ? (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-up-box"
-                        size={35}
-                      />
-                    ) : (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-down-box"
-                        size={35}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Animated.View
-                ref={'vegetablefooter'}
-                style={{
-                  padding: 10,
-                  height: 100,
-                  overflow: 'hidden',
-                }}>
-                <View
-                  style={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                  }}>
-                  {this.state.isLoading ? (
-                    <View
-                      style={{
-                        height: 80,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {show_loading_animation_ingredients()}
-                    </View>
-                  ) : (
-                    this.view_vegetable_ingredients()
-                  )}
-                </View>
-              </Animated.View>
+              style={{
+                width: '100%',
+                height: 400,
+                alignContent: 'center',
+                justifyContent: 'center',
+              }}>
+              {show_loading_animation_pantry()}
             </View>
-            <View
-              style={[Styles.ingredients_view_list_container, {marginTop: 30}]}>
-              <View style={Styles.ingredients_view_list_container_header}>
-                <View
-                  style={Styles.ingredients_view_list_container_header_picture}>
-                  <Image source={require('../assets/images/fruit.png')} />
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={{marginLeft: 10, fontFamily: 'Comfortaa-Bold'}}>
-                    Fruits
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      this.state.fruits_ingredient_container_dropdown_clicked
-                    ) {
-                      this.refs['fruitfooter'].setNativeProps({
-                        height: 100,
-                      });
-                      this.setState({
-                        fruits_ingredient_container_dropdown_clicked: false,
-                      });
-                    } else {
-                      this.refs['fruitfooter'].setNativeProps({
-                        height: 'auto',
-                      });
-                      this.setState({
-                        fruits_ingredient_container_dropdown_clicked: true,
-                      });
-                    }
-                  }}>
-                  <View style={{marginRight: 10}}>
-                    {this.state.fruits_ingredient_container_dropdown_clicked ? (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-up-box"
-                        size={35}
-                      />
-                    ) : (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-down-box"
-                        size={35}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Animated.View
-                ref={'fruitfooter'}
-                style={{
-                  padding: 10,
-                  height: 100,
-                  overflow: 'hidden',
-                }}>
-                <View
-                  style={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                  }}>
-                  {this.state.isLoading ? (
-                    <View
-                      style={{
-                        height: 80,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {show_loading_animation_ingredients()}
-                    </View>
-                  ) : (
-                    this.view_fruits_ingredients()
-                  )}
-                </View>
-              </Animated.View>
-            </View>
-            <View
-              style={[Styles.ingredients_view_list_container, {marginTop: 30}]}>
-              <View style={Styles.ingredients_view_list_container_header}>
-                <View
-                  style={Styles.ingredients_view_list_container_header_picture}>
-                  <Image source={require('../assets/images/baking.png')} />
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={{marginLeft: 10, fontFamily: 'Comfortaa-Bold'}}>
-                    Baking {'&'} Grains
-                  </Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => {
-                    if (
-                      this.state.baking_ingredient_container_dropdown_clicked
-                    ) {
-                      this.refs['bakingfooter'].setNativeProps({
-                        height: 100,
-                      });
-                      this.setState({
-                        baking_ingredient_container_dropdown_clicked: false,
-                      });
-                    } else {
-                      this.refs['bakingfooter'].setNativeProps({
-                        height: 'auto',
-                      });
-                      this.setState({
-                        baking_ingredient_container_dropdown_clicked: true,
-                      });
-                    }
-                  }}>
-                  <View style={{marginRight: 10}}>
-                    {this.state.baking_ingredient_container_dropdown_clicked ? (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-up-box"
-                        size={35}
-                      />
-                    ) : (
-                      <MaterialCommunityIcons
-                        color="black"
-                        name="chevron-down-box"
-                        size={35}
-                      />
-                    )}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <Animated.View
-                ref={'bakingfooter'}
-                style={{
-                  padding: 10,
-                  height: 100,
-                  overflow: 'hidden',
-                }}>
-                <View
-                  style={{
-                    flexWrap: 'wrap',
-                    flexDirection: 'row',
-                  }}>
-                  {this.state.isLoading ? (
-                    <View
-                      style={{
-                        height: 80,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {show_loading_animation_ingredients()}
-                    </View>
-                  ) : (
-                    this.view_baking_grains_ingredients()
-                  )}
-                </View>
-              </Animated.View>
-            </View>
-            <View style={{marginBottom: 40}}></View>
-          </ScrollView>
+          ) : (
+            <FlatList
+              showsVerticalScrollIndicator={false}
+              data={this.state.ingredients_names}
+              renderItem={this.mapIngredients}
+              keyExtractor={(item, index) => index.toString()}
+              onEndReached={null}
+              onEndReachedThreshold={this.state.ingredients_names.length - 2}
+            />
+          )}
+          <View style={{marginBottom: 0}}></View>
         </Animatable.View>
       </View>
     );
