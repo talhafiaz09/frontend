@@ -16,6 +16,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as Animatable from 'react-native-animatable';
+import Voice from '@react-native-community/voice';
 import {
   show_typing_animation_input_fields,
   show_loading_animation_ingredients,
@@ -24,6 +25,8 @@ import {
 } from '../functions/FunctionHandler';
 import {toast, callToast} from '../functions/Toast';
 import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import VoiceModal from '../components/VoiceModal';
+import SearchIngredient from '../components/SearchIngredient';
 var toast_type = '';
 var toast_text = '';
 class IngredientsList extends Component {
@@ -46,8 +49,21 @@ class IngredientsList extends Component {
       show_model: false,
       loading_animation: true,
       showPantryLoading: true,
+      microphonePressed: false,
+      searchedHandler: false,
+      inputtext: '',
     };
   }
+  microphonePressedHandler = () => {
+    this.state.microphonePressed
+      ? this.setState({microphonePressed: false})
+      : this.setState({microphonePressed: true});
+  };
+  searchedHandlerFunction = () => {
+    this.state.searchedHandler
+      ? this.setState({searchedHandler: false})
+      : this.setState({searchedHandler: true});
+  };
   async fetchUserPantries() {
     this.setState({
       userpantriesId: [],
@@ -455,6 +471,25 @@ class IngredientsList extends Component {
             </View>
           </KeyboardAvoidingView>
         </Modal>
+        {this.state.microphonePressed ? (
+          <VoiceModal
+            ingredientsList={this.state.ingredients_list}
+            microphonePressed={this.state.microphonePressed}
+            microphonePressedHandler={this.microphonePressedHandler}
+            userpantriesname={this.state.userpantriesname}
+            username={this.state.username}
+          />
+        ) : null}
+        {this.state.searchedHandler && this.state.inputtext != '' ? (
+          <SearchIngredient
+            ingredientsList={this.state.ingredients_list}
+            searchedHandler={this.state.searchedHandler}
+            searchedHandlerFunction={this.searchedHandlerFunction}
+            userpantriesname={this.state.userpantriesname}
+            username={this.state.username}
+            inputtext={this.state.inputtext}
+          />
+        ) : null}
         <View flex={1}>
           <View style={Styles.home_screen_headers}>
             <Animatable.View animation="bounceInLeft" duration={1500}>
@@ -496,12 +531,21 @@ class IngredientsList extends Component {
                 onBlur={() => {
                   this.toogle_typing_animation_search_bar();
                 }}
+                onChangeText={(text) => {
+                  this.setState({
+                    inputtext: text,
+                  });
+                  // this.textInputChange(text);
+                }}
                 style={Styles.search_bar_styling}
                 placeholder="Search ingredients"
               />
               <MaterialCommunityIcons
                 onPress={() => {
                   this.refs['search_bar'].blur();
+                  this.setState({
+                    searchedHandler: true,
+                  });
                 }}
                 style={{paddingLeft: 10}}
                 name="send"
@@ -512,6 +556,7 @@ class IngredientsList extends Component {
             <TouchableOpacity
               onPress={() => {
                 this.refs['search_bar'].blur();
+                this.setState({microphonePressed: true});
               }}>
               <Animatable.View
                 animation="bounceInRight"

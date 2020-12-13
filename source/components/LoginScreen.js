@@ -411,12 +411,16 @@ class LoginScreen extends Component {
     if (this.state.username == '') {
       this.setState({
         toast_show: true,
+        typing_animation_button: false,
+        disable_button: false,
       });
       toast_type = 'error';
       toast_text = 'Enter email';
     } else if (!this.state.textfield_input_change_check) {
       this.setState({
         toast_show: true,
+        typing_animation_button: false,
+        disable_button: false,
       });
       toast_type = 'error';
       toast_text = 'Enter valid email';

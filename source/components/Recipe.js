@@ -353,9 +353,7 @@ class Recipe extends Component {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               {/* Copy this view from here*/}
-              <View style={{}}>
-                <Text>Tags here</Text>
-              </View>
+              <View style={{}}>{/* <Text>Tags here</Text> */}</View>
               {/* Copy this view ti here*/}
             </ScrollView>
           </View>

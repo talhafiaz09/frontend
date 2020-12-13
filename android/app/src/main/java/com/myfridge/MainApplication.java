@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.wenkesj.voice.VoicePackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.wenkesj.voice.VoicePackage;
 import com.rnfloatingvideowidget.FloatingVideoWidgetPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
 import io.invertase.firebase.RNFirebasePackage;
@@ -17,7 +20,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
-
+import com.wenkesj.voice.VoicePackage;
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -34,6 +37,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           packages.add(new LottiePackage());
+          // packages.add(new VoicePackage());
           return packages;
         }
 

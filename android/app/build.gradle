@@ -191,7 +191,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation project(':lottie-react-native')
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
-
+    // compile project(':@react-native-community_voice')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }

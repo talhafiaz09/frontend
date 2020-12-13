@@ -10,7 +10,7 @@ export function callToast() {
     duration: 250,
     useNativeDriver: false,
   }).start(closeToast());
-}
+} 
 
 function closeToast() {
   setTimeout(() => {

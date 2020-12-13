@@ -14,10 +14,17 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import RecipeButton from '../components/RecipeButton';
 const Tabs = createBottomTabNavigator();
 class HomeScreenNavigation extends Component {
+  constructor() {
+    super();
+    this.state = {
+      off: 'yes',
+    };
+  }
+
   render() {
     return (
       <Tabs.Navigator
-        initialRouteName="Shopping List"
+        // initialRouteName="Shopping List"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,

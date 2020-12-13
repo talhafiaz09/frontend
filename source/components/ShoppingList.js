@@ -73,11 +73,17 @@ class ShoppingList extends Component {
     )
       .then((res) => res.json())
       .then((data) => {
-        if (data.success) {
+        console.log(data);
+        if (data.success && data.shoppingList != null) {
           for (i = 0; i < data.shoppingList.ingredients.length; i++) {
             this.state.shopping_list.push(data.shoppingList.ingredients[i]);
             this.state.buy.push(data.shoppingList.buy[i]);
           }
+          // console.log(this.state.shopping_list);
+          this.setState({
+            isLoading: false,
+          });
+        } else if (data.success && data.shoppingList == null) {
           this.setState({
             isLoading: false,
           });

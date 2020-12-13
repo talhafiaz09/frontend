@@ -12,6 +12,7 @@ import {
   KeyboardAvoidingView,
   BackHandler,
 } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import VideoPlayer from '../components/VideoPlayer';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -511,22 +512,27 @@ class RecipeDetails extends Component {
               <View>
                 {this.props.route.params.video == '' ||
                 this.props.route.params.video == null ? (
-                  // <Text
-                  //   style={{
-                  //     alignSelf: 'center',
-                  //     fontFamily: 'Comfortaa-Medium',
-                  //     fontSize: 18,
-                  //   }}>
-                  //   Video not available.
-                  // </Text>
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Videoplayer', {
-                        navigation: this.props.navigation,
-                      });
+                      this.props.navigation.navigate('Videoplayer');
                     }}>
-                    <View>
-                      <Text>View Video</Text>
+                    <View
+                      style={[
+                        Styles.login_screen_buttons_container,
+                        {width: '100%', height: 50},
+                      ]}>
+                      <LinearGradient
+                        colors={['#EF5350', '#F44336']}
+                        style={
+                          Styles.login_screen_buttons_container_linear_gradient
+                        }>
+                        <Text
+                          style={
+                            Styles.login_screen_buttons_container_linear_gradient_text
+                          }>
+                          Watch Video
+                        </Text>
+                      </LinearGradient>
                     </View>
                   </TouchableOpacity>
                 ) : (

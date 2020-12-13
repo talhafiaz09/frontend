@@ -18,6 +18,8 @@ target 'MyFridge' do
 
   pod 'RNGoogleSignin', :path => '../node_modules/@react-native-community/google-signin'
 
+  pod 'react-native-voice', :path => '../node_modules/@react-native-community/voice'
+
   target 'MyFridgeTests' do
     inherit! :complete
     # Pods for testing

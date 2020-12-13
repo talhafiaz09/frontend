@@ -7,6 +7,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Sidebar} from '../navigations/CustomDrawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
+import Voice from '@react-native-community/voice';
 const Drawer = createDrawerNavigator();
 class HomeScreen extends Component {
   constructor(props) {
@@ -15,8 +16,10 @@ class HomeScreen extends Component {
       username: '',
       imageUri: '',
       info: null,
+      off: null,
     };
   }
+
   UNSAFE_componentWillMount() {
     this.getUserInfo();
     this.getExtraInfo();
@@ -33,17 +36,22 @@ class HomeScreen extends Component {
     try {
       var email = await AsyncStorage.getItem('username');
       var profilepicture = await AsyncStorage.getItem('profilepicture');
+      var check = await AsyncStorage.getItem('f_g_user');
+      console.log(check);
       profilepicture = 'data:image/png;base64,' + profilepicture;
       this.setState({
         username: email,
         imageUri: profilepicture,
+        off: check,
       });
+      console.log(this.state.off);
     } catch (err) {}
   }
   async clearAsyncStorage() {
     try {
       await AsyncStorage.removeItem('username');
       await AsyncStorage.removeItem('profilepicture');
+      await AsyncStorage.removeItem('f_g_user');
     } catch (err) {}
   }
   render() {
@@ -60,6 +68,7 @@ class HomeScreen extends Component {
             imageUri={this.state.imageUri}
             info={this.state.info}
             clearAsyncStorage={this.clearAsyncStorage}
+            off={this.state.off}
           />
         )}>
         <Drawer.Screen
@@ -71,16 +80,17 @@ class HomeScreen extends Component {
             ),
           }}
         />
-        {/* {this.state.info == null || this.state.info == '' ? ( */}
-        <Drawer.Screen
-          name="Edit profile"
-          component={this.Profile}
-          options={{
-            drawerIcon: ({color}) => (
-              <AntDesign color={color} name="user" size={20} />
-            ),
-          }}
-        />
+        {this.state.off != 'yes' ? (
+          <Drawer.Screen
+            name="Edit profile"
+            component={this.Profile}
+            options={{
+              drawerIcon: ({color}) => (
+                <AntDesign color={color} name="user" size={20} />
+              ),
+            }}
+          />
+        ) : null}
         <Drawer.Screen
           name="Add recipe"
           component={this.Setting}
