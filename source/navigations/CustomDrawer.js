@@ -5,7 +5,7 @@ import {
   DrawerItemList,
   DrawerItem,
 } from '@react-navigation/drawer';
-import {Container, Content, Right, Footer, Button} from 'native-base';
+import {Container, Content, Footer} from 'native-base';
 import Styles from '../style/StyleSheet';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 let email = '';

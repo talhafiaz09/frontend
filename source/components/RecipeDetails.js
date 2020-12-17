@@ -542,7 +542,7 @@ class RecipeDetails extends Component {
                     }}>
                     <View>
                       <Text>View Video</Text>
-                      <Videoplayer />
+                      {/* <Videoplayer /> */}
                     </View>
                   </TouchableOpacity>
                 )}

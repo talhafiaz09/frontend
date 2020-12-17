@@ -7,16 +7,16 @@ let animatedValue = new Animated.Value(-80);
 export function callToast() {
   Animated.timing(animatedValue, {
     toValue: 0,
-    duration: 250,
+    duration: 350,
     useNativeDriver: false,
   }).start(closeToast());
-} 
+}
 
 function closeToast() {
   setTimeout(() => {
     Animated.timing(animatedValue, {
       toValue: -80,
-      duration: 250,
+      duration: 350,
       useNativeDriver: false,
     }).start();
   }, 800);

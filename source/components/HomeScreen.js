@@ -7,6 +7,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {Sidebar} from '../navigations/CustomDrawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
+import AddRecipe from '../components/AddRecipe';
 import Voice from '@react-native-community/voice';
 const Drawer = createDrawerNavigator();
 class HomeScreen extends Component {
@@ -22,7 +23,7 @@ class HomeScreen extends Component {
 
   UNSAFE_componentWillMount() {
     this.getUserInfo();
-    this.getExtraInfo();
+    // this.getExtraInfo();
   }
   async getExtraInfo() {
     try {
@@ -57,6 +58,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
+        initialRouteName={'Add recipe'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -93,7 +95,7 @@ class HomeScreen extends Component {
         ) : null}
         <Drawer.Screen
           name="Add recipe"
-          component={this.Setting}
+          component={this.AddRecipe}
           options={{
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="addfile" size={20} />
@@ -141,6 +143,13 @@ class HomeScreen extends Component {
     return (
       <View animation="fadeInLeft" style={Styles.main_container}>
         <ProfileScreen navigation={navigation} />
+      </View>
+    );
+  }
+  AddRecipe({navigation}) {
+    return (
+      <View animation="fadeInLeft" style={Styles.main_container}>
+        <AddRecipe navigation={navigation} />
       </View>
     );
   }

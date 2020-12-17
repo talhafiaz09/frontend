@@ -4,7 +4,7 @@ import {Animated} from 'react-native';
 import {TypingAnimation} from 'react-native-typing-animation';
 export const FETCH_URL = {
   //Phone
-  IP: 'http://192.168.0.106:3000',
+  IP: 'http://192.168.0.103:3000',
   //Emulator
   // IP: 'http://10.0.2.2:3000',
 };

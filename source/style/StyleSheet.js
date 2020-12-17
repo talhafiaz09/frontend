@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {Dimensions} from 'react-native';
 const WINDOW_HEIGHT = Dimensions.get('window').height;
+const WINDOW_WIDTH = Dimensions.get('window').width;
 export const CELL_SIZE = 70;
 export const CELL_BORDER_RADIUS = 8;
 export const DEFAULT_CELL_BG_COLOR = '#fff';
@@ -164,8 +165,8 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
   },
   signup_screen_image_uploader: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    height: '100%',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -369,7 +370,8 @@ const Styles = StyleSheet.create({
   pantry_modal_container: {
     height: 250,
     width: '80%',
-    backgroundColor: '#FFDEAD',
+    // backgroundColor: '#FFDEAD',
+    backgroundColor: '#ffcc00',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 1,
@@ -444,7 +446,8 @@ const Styles = StyleSheet.create({
   ingredient_modal_container: {
     height: 400,
     width: '80%',
-    backgroundColor: '#FFDEAD',
+    // backgroundColor: '#FFDEAD',
+    backgroundColor: '#ffcc00',
     shadowColor: '#000',
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 1,
@@ -756,6 +759,29 @@ const Styles = StyleSheet.create({
     color: 'black',
     alignSelf: 'center',
     fontSize: 18,
+  },
+  custom_text_field: {
+    flexDirection: 'row',
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 10,
+    paddingRight: 10,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    backgroundColor: 'white',
+  },
+  add_recipe_image_container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 10,
+    height: WINDOW_WIDTH,
+    borderColor: '#fff',
+    borderWidth: 2,
+    borderRadius: 20,
+    borderStyle: 'dotted',
   },
 });
 export default Styles;
