@@ -8,6 +8,7 @@ import {Sidebar} from '../navigations/CustomDrawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import AddRecipe from '../components/AddRecipe';
+import MyRecipies from '../components/MyRecipies';
 import Voice from '@react-native-community/voice';
 const Drawer = createDrawerNavigator();
 class HomeScreen extends Component {
@@ -45,7 +46,7 @@ class HomeScreen extends Component {
         imageUri: profilepicture,
         off: check,
       });
-      console.log(this.state.off);
+      // console.log(this.state.off);
     } catch (err) {}
   }
   async clearAsyncStorage() {
@@ -58,7 +59,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
-        initialRouteName={'Add recipe'}
+        // initialRouteName={'Add recipe'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -82,7 +83,7 @@ class HomeScreen extends Component {
             ),
           }}
         />
-        {this.state.off != 'yes' ? (
+        {this.state.off !== 'yes' ? (
           <Drawer.Screen
             name="Edit profile"
             component={this.Profile}
@@ -104,7 +105,7 @@ class HomeScreen extends Component {
         />
         <Drawer.Screen
           name="My recipes"
-          component={this.Setting}
+          component={this.MyRecipies}
           options={{
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="profile" size={20} />
@@ -150,6 +151,13 @@ class HomeScreen extends Component {
     return (
       <View animation="fadeInLeft" style={Styles.main_container}>
         <AddRecipe navigation={navigation} />
+      </View>
+    );
+  }
+  MyRecipies({navigation}) {
+    return (
+      <View animation="fadeInLeft" style={Styles.main_container}>
+        <MyRecipies navigation={navigation} />
       </View>
     );
   }

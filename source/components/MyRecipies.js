@@ -31,7 +31,7 @@ import {toast, callToast} from '../functions/Toast';
 import {ScrollView} from 'react-native-gesture-handler';
 var toast_type = '';
 var toast_text = '';
-class FavoriteRecipies extends Component {
+class MyRecipies extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -353,9 +353,7 @@ class FavoriteRecipies extends Component {
               animation="bounceInRight"
               duration={1500}
               style={Styles.home_screen_headers_text_container}>
-              <Text style={Styles.home_screen_headers_text}>
-                Favourite Recipies
-              </Text>
+              <Text style={Styles.home_screen_headers_text}>My Recipies</Text>
             </Animatable.View>
           </View>
         </View>
@@ -376,7 +374,7 @@ class FavoriteRecipies extends Component {
                   fontSize: 18,
                   alignSelf: 'center',
                 }}>
-                No favourite recipies.
+                You have no recipies.
               </Text>
             </View>
           ) : (
@@ -390,5 +388,4 @@ class FavoriteRecipies extends Component {
     );
   }
 }
-export default FavoriteRecipies;
- 
+export default MyRecipies;

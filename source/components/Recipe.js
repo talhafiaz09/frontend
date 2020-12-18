@@ -45,7 +45,11 @@ class Recipe extends Component {
       recipe_steps: [],
       recipe_images: [],
       recipe_nutrition: [],
+      meal_type: [],
+      cuisine_type: [],
       recipe_video: [],
+      user_email: [],
+      timerequired: [],
     };
   }
   // async getRecipeApiData() {
@@ -116,16 +120,20 @@ class Recipe extends Component {
             this.state.recipe_images.push(data.recipies[q].imageURL);
             this.state.recipe_nutrition.push(data.recipies[q].nutrition);
             this.state.recipe_video.push(data.recipies[q].video);
+            this.state.meal_type.push(data.recipies[q].mealtype);
+            this.state.cuisine_type.push(data.recipies[q].cuisine);
+            this.state.user_email.push(data.recipies[q].useremail);
+            this.state.timerequired.push(data.recipies[q].timerequired);
             ia = [];
             iq = [];
           }
-          // console.log(this.state.recipe_images);
+          // console.log(this.state.user_email);
         } else {
-          console.log(data);
+          // console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -150,8 +158,12 @@ class Recipe extends Component {
     images,
     nutrition,
     video,
+    mealtype,
+    cuisine,
+    useremail,
+    timerequired,
   ) {
-    console.log(ingredients);
+    console.log(video);
     this.props.navigation.navigate('RecipeDetails', {
       id: id,
       name: name,
@@ -162,6 +174,10 @@ class Recipe extends Component {
       images: images,
       nutrition: nutrition,
       video: video,
+      mealtype: mealtype,
+      cuisine: cuisine,
+      useremail: useremail,
+      timerequired: timerequired,
       navigation: this.props.navigation,
     });
   }
@@ -186,6 +202,10 @@ class Recipe extends Component {
                 this.state.recipe_images[key],
                 this.state.recipe_nutrition[key],
                 this.state.recipe_video[key],
+                this.state.meal_type[key],
+                this.state.cuisine_type[key],
+                this.state.user_email[key],
+                this.state.timerequired[key],
               );
             }}>
             <View style={Styles.image_viewer_in_recipe}>
@@ -206,7 +226,7 @@ class Recipe extends Component {
   }
   componentDidMount() {
     // this.getRecipeApiData();
-    console.log(this.props.route.params);
+    // console.log(this.props.route.params);
     if (this.props.route.params != null) {
       this.setState({
         gotParams: true,
@@ -239,14 +259,14 @@ class Recipe extends Component {
           this.getRecipiesfromDatabase();
         } else if (data.success && !data.found) {
           this.setState({gotdataFromParams: false});
-          console.log('Nothing to show');
+          // console.log('Nothing to show');
           this.getRecipiesfromDatabase();
         } else {
           // console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,

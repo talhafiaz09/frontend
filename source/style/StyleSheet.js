@@ -783,5 +783,18 @@ const Styles = StyleSheet.create({
     borderRadius: 20,
     borderStyle: 'dotted',
   },
+  recipe_detail_meal_cuisine_tags: {
+    backgroundColor: '#ffd23a',
+    margin: 3,
+    borderRadius: 5,
+    justifyContent: 'center',
+    padding: 5,
+  },
+  recipe_detail_meal_cuisine_tags_text: {
+    alignSelf: 'center',
+    fontFamily: 'Comfortaa-Medium',
+    color: 'white',
+    fontSize: 14,
+  },
 });
 export default Styles;

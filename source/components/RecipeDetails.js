@@ -64,7 +64,7 @@ class RecipeDetails extends Component {
     this.checkIfFavourite();
   }
   async checkIfFavourite() {
-    console.log(this.props.route.params.id);
+    // console.log(this.props.route.params.id);
     await fetch(FETCH_URL.IP + '/favourite/findfavouriterecipies', {
       method: 'POST',
       headers: {
@@ -78,7 +78,7 @@ class RecipeDetails extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.exist) {
-          console.log(data);
+          // console.log(data);
           this.setState({
             isFavourite: true,
           });
@@ -87,11 +87,11 @@ class RecipeDetails extends Component {
             isFavourite: false,
           });
         } else {
-          console.log(data);
+          // console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -120,7 +120,7 @@ class RecipeDetails extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.status != 'Already exist') {
-          console.log(data);
+          // console.log(data);
           this.setState({
             toast_show: true,
             isFavourite: true,
@@ -132,11 +132,11 @@ class RecipeDetails extends Component {
             isFavourite: true,
           });
         } else {
-          console.log(data);
+          // console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -165,7 +165,7 @@ class RecipeDetails extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          console.log('here i am');
+          // console.log('here i am');
           this.setState({
             toast_show: true,
             isFavourite: false,
@@ -173,11 +173,11 @@ class RecipeDetails extends Component {
           toast_type = 'success';
           toast_text = 'Removed from favourites';
         } else {
-          console.log(data);
+          // console.log(data);
         }
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
         if ('Timeout' || 'Network request failed') {
           this.setState({
             toast_show: true,
@@ -227,6 +227,28 @@ class RecipeDetails extends Component {
       );
     });
   }
+  mapMealType() {
+    return this.props.route.params.mealtype.map((data, key) => {
+      return (
+        <View key={key} style={Styles.recipe_detail_meal_cuisine_tags}>
+          <Text style={Styles.recipe_detail_meal_cuisine_tags_text}>
+            {data}
+          </Text>
+        </View>
+      );
+    });
+  }
+  mapCuisineType() {
+    return this.props.route.params.cuisine.map((data, key) => {
+      return (
+        <View key={key} style={Styles.recipe_detail_meal_cuisine_tags}>
+          <Text style={Styles.recipe_detail_meal_cuisine_tags_text}>
+            {data}
+          </Text>
+        </View>
+      );
+    });
+  }
   mapSteps() {
     return this.props.route.params.steps.map((data, key) => {
       return (
@@ -244,7 +266,7 @@ class RecipeDetails extends Component {
   render() {
     return (
       <Animated.View animaton="bounceInLeft" style={Styles.main_container}>
-        {console.log(this.props.route.params.nutrition.proteins)}
+        {/* {console.log(this.props.route.params.nutrition.proteins)} */}
         <View style={Styles.toast_styling}>
           {toast(toast_type, toast_text)}
           {this.state.toast_show ? callToast() : null}
@@ -338,6 +360,90 @@ class RecipeDetails extends Component {
                 </Text>
               </View>
               <View>{this.mapIngredients()}</View>
+            </View>
+            <View style={{marginTop: 50}}>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginBottom: 10,
+                  }}>
+                  Time required:
+                </Text>
+              </View>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginTop: 10,
+                    color: 'blue',
+                    alignSelf: 'center',
+                  }}>
+                  {this.props.route.params.timerequired + ' mins'}
+                </Text>
+              </View>
+            </View>
+            <View style={{marginTop: 50}}>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginBottom: 10,
+                  }}>
+                  Meal Type:
+                </Text>
+              </View>
+              <View>
+                {this.props.route.params.mealtype.length === 0 ? (
+                  <Text
+                    style={{
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 18,
+                      marginTop: 10,
+                      alignSelf: 'center',
+                    }}>
+                    No meal type specified.
+                  </Text>
+                ) : (
+                  <View
+                    style={{flexDirection: 'row', flexWrap: 'wrap', flex: 1}}>
+                    {this.mapMealType()}
+                  </View>
+                )}
+              </View>
+            </View>
+            <View style={{marginTop: 50}}>
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginBottom: 10,
+                  }}>
+                  Cuisine:
+                </Text>
+              </View>
+              <View>
+                {this.props.route.params.cuisine.length === 0 ? (
+                  <Text
+                    style={{
+                      fontFamily: 'Comfortaa-Bold',
+                      fontSize: 18,
+                      marginTop: 10,
+                      alignSelf: 'center',
+                    }}>
+                    No cuisine specified.
+                  </Text>
+                ) : (
+                  <View
+                    style={{flexDirection: 'row', flexWrap: 'wrap', flex: 1}}>
+                    {this.mapCuisineType()}
+                  </View>
+                )}
+              </View>
             </View>
             <View style={{marginTop: 50}}>
               <View>
@@ -510,11 +616,19 @@ class RecipeDetails extends Component {
                 </Text>
               </View>
               <View>
-                {this.props.route.params.video == '' ||
-                this.props.route.params.video == null ? (
+                {this.props.route.params.video === '' ? (
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 18}}>
+                      No video to show
+                    </Text>
+                  </View>
+                ) : (
                   <TouchableOpacity
                     onPress={() => {
-                      this.props.navigation.navigate('Videoplayer');
+                      this.props.navigation.navigate('Videoplayer', {
+                        video: this.props.route.params.video,
+                        navigation: this.props.route.params.navigation,
+                      });
                     }}>
                     <View
                       style={[
@@ -533,16 +647,6 @@ class RecipeDetails extends Component {
                           Watch Video
                         </Text>
                       </LinearGradient>
-                    </View>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={() => {
-                      // this.props.navigation.navigate('Videoplayer');
-                    }}>
-                    <View>
-                      <Text>View Video</Text>
-                      {/* <Videoplayer /> */}
                     </View>
                   </TouchableOpacity>
                 )}

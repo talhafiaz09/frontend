@@ -25,7 +25,7 @@ class SplashScreen extends Component {
     try {
       var email = await AsyncStorage.getItem('username');
       var check = await AsyncStorage.getItem('f_g_name');
-      console.log(check);
+      // console.log(check);
       this.setState({
         username: email,
       });

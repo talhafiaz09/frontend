@@ -44,7 +44,7 @@ export function Sidebar({...props}) {
                 <Text style={Styles.user_name_styling}>
                   {props.username.substring(0, props.username.indexOf('@'))}
                 </Text>
-                {props.off == null ? (
+                {props.off === null ? (
                   <TouchableOpacity
                     onPress={() => {
                       props.navigation.navigate('Edit profile');

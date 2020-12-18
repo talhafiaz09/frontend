@@ -111,6 +111,7 @@ class AddRecipe extends Component {
       },
       video: '',
       show_model: false,
+      uploaderror: false,
     };
   }
   componentDidMount() {
@@ -374,11 +375,34 @@ class AddRecipe extends Component {
               .then((data) => {
                 console.log(data);
                 if (data.success) {
+                  fetch(FETCH_URL.IP + '/myrecipie/addtomyrecipie', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      useremail: this.state.useremail,
+                      recipeId: data.Recipe._id,
+                    }),
+                  })
+                    .then((res) => res.json())
+                    .then((data) => {
+                      console.log(data);
+                      if (data.success) {
+                      } else {
+                      }
+                      this.setState({show_model: false, uploaderror: false});
+                    })
+                    .catch((error) => {
+                      this.setState({uploaderror: true});
+                      if ('Timeout' || 'Network request failed') {
+                      }
+                    });
                 } else {
                 }
-                this.setState({show_model: false});
               })
               .catch((error) => {
+                this.setState({uploaderror: true});
                 if (
                   error.message === 'Timeout' ||
                   error.message === 'Network request failed'
@@ -387,11 +411,13 @@ class AddRecipe extends Component {
               });
           })
           .catch((error) => {
-            console.log(error);
+            this.setState({uploaderror: true});
+            // console.log(error);
           });
       })
       .catch((error) => {
-        console.log(error);
+        this.setState({uploaderror: true});
+        // console.log(error);
       });
     // toast_text = 'Network failure';
     // toast_type = 'error';
