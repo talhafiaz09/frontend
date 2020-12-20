@@ -72,7 +72,9 @@ const Styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
-    padding: 30,
+    paddingTop: 30,
+    paddingRight: 30,
+    paddingLeft: 30,
   },
   login_screen_login_text: {
     alignSelf: 'center',

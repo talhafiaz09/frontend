@@ -28,6 +28,8 @@ target 'MyFridge' do
 
   pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
 
+  pod 'RNTextDetector', :path => '../node_modules/react-native-text-detector'
+
   target 'MyFridgeTests' do
     inherit! :complete
     # Pods for testing

@@ -54,6 +54,49 @@ class RecipeDetails extends Component {
     this.get_email();
     this.addToFavouritesHandler();
   }
+  deleteMyRecipie = () => {
+    fetch(FETCH_URL.IP + '/myrecipie/removefrommyrecipie', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        useremail: this.props.route.params.useremail,
+        recipeId: this.props.route.params.id,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          toast_type = 'success';
+          toast_text = 'Recipie deleted';
+          this.setState({
+            toast_show: true,
+          });
+          setTimeout(() => {
+            this.setState({
+              toast_show: false,
+            });
+            this.props.navigation.pop();
+          }, 500);
+        } else {
+        }
+      })
+      .catch((error) => {
+        if ('Timeout' || 'Network request failed') {
+          toast_type = 'error';
+          toast_text = 'Network failure';
+          this.setState({
+            toast_show: true,
+          });
+        }
+      });
+    setTimeout(() => {
+      this.setState({
+        toast_show: false,
+      });
+    }, 500);
+  };
   async get_email() {
     try {
       var email = await AsyncStorage.getItem('username');
@@ -327,24 +370,30 @@ class RecipeDetails extends Component {
               </Text>
             </View>
             <View style={Styles.heart_styling}>
-              <TouchableOpacity
-                onPress={() => {
-                  if (this.state.isFavourite) {
-                    this.removeFromFavourite();
-                  } else {
-                    this.addToFavouritesHandler();
-                  }
-                }}>
-                {this.state.isFavourite ? (
-                  <MaterialCommunityIcons color="red" name="heart" size={40} />
-                ) : (
-                  <MaterialCommunityIcons
-                    color="red"
-                    name="heart-outline"
-                    size={40}
-                  />
-                )}
-              </TouchableOpacity>
+              {this.props.route.params.myrecipie ? null : (
+                <TouchableOpacity
+                  onPress={() => {
+                    if (this.state.isFavourite) {
+                      this.removeFromFavourite();
+                    } else {
+                      this.addToFavouritesHandler();
+                    }
+                  }}>
+                  {this.state.isFavourite ? (
+                    <MaterialCommunityIcons
+                      color="red"
+                      name="heart"
+                      size={40}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      color="red"
+                      name="heart-outline"
+                      size={40}
+                    />
+                  )}
+                </TouchableOpacity>
+              )}
             </View>
           </View>
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -652,6 +701,78 @@ class RecipeDetails extends Component {
                 )}
               </View>
             </View>
+            {this.props.route.params.myrecipie ? (
+              <View
+                style={{
+                  flexDirection: 'row',
+                  flex: 1,
+                  marginTop: 20,
+                }}>
+                <View flex={1} style={{marginRight: 5}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate('Editrecipe', {
+                        id: this.props.route.params.id,
+                        name: this.props.route.params.name,
+                        ingredients: this.props.route.params.ingredients,
+                        ingredients_quantity: this.props.route.params
+                          .ingredients_quantity,
+                        steps: this.props.route.params.steps,
+                        imageURl: this.props.route.params.images,
+                        nutrition: this.props.route.params.nutrition,
+                        videoURl: this.props.route.params.video,
+                        mealtype: this.props.route.params.mealtype,
+                        cuisine: this.props.route.params.cuisine,
+                        useremail: this.props.route.params.useremail,
+                        timerequired: this.props.route.params.timerequired,
+                        navigation: this.props.navigation,
+                      });
+                    }}
+                    style={{
+                      flex: 1,
+                      height: 50,
+                      marginTop: 20,
+                    }}>
+                    <LinearGradient
+                      colors={['#e1ad01', '#e1ad01']}
+                      style={
+                        Styles.login_screen_buttons_container_linear_gradient
+                      }>
+                      <Text
+                        style={
+                          Styles.login_screen_buttons_container_linear_gradient_text
+                        }>
+                        Edit
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+                <View flex={1} style={{marginLeft: 5}}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.deleteMyRecipie();
+                    }}
+                    style={{
+                      flex: 1,
+                      height: 50,
+                      marginTop: 20,
+                    }}>
+                    <LinearGradient
+                      colors={['#003152', '#1D2951']}
+                      style={
+                        Styles.login_screen_buttons_container_linear_gradient
+                      }>
+                      <Text
+                        style={
+                          Styles.login_screen_buttons_container_linear_gradient_text
+                        }>
+                        Delete
+                      </Text>
+                    </LinearGradient>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            ) : null}
             <View style={{marginBottom: 40}}></View>
           </ScrollView>
         </Animatable.View>

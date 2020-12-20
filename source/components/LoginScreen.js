@@ -7,6 +7,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Animated,
+  ScrollView,
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import Styles from '../style/StyleSheet';
@@ -502,194 +503,200 @@ class LoginScreen extends Component {
             MyFridge
           </Animatable.Text>
         </Animatable.View>
+
         <Animatable.View
           delay={400}
           duration={2000}
           animation="bounceInUp"
           style={Styles.login_screen_footer}>
-          <Animatable.Text
-            animation="rubberBand"
-            iterationCount="infinite"
-            iterationDelay={1000}
-            style={Styles.login_screen_login_text}>
-            LOGIN
-          </Animatable.Text>
-          <View style={Styles.login_screen_input_fields_container}>
-            {this.state.typing_animation_email ? (
-              show_typing_animation_input_fields()
-            ) : (
-              <FontAwesome name="user" color="#EF6C00" size={30} />
-            )}
-            <TextInput
-              editable={!this.state.disable_button ? true : false}
-              ref="email_input"
-              onFocus={() => {
-                this.toggle_animation_values('email');
-              }}
-              onBlur={() => {
-                this.toggle_animation_values('email');
-              }}
-              style={Styles.input_field}
-              placeholder="Email"
-              onChangeText={(text) => {
-                this.setState({
-                  username: text,
-                  username_check: text,
-                });
-                this.textInputChange(text);
-              }}
-            />
-            {this.state.textfield_input_change_check ? (
-              <Feather name="check-circle" color="green" size={20} />
-            ) : this.state.username_check != '' ? (
-              <Feather name="x-circle" color="red" size={20} />
-            ) : null}
-          </View>
-          <View style={Styles.login_screen_input_fields_container}>
-            {this.state.typing_animation_password ? (
-              show_typing_animation_input_fields()
-            ) : (
-              <FontAwesome
-                name="lock"
-                color="#EF6C00"
-                size={30}
-                style={{paddingLeft: 2.2}}
-              />
-            )}
-            <TextInput
-              editable={!this.state.disable_button ? true : false}
-              ref="password_input"
-              onFocus={() => {
-                this.toggle_animation_values('password');
-              }}
-              onBlur={() => {
-                this.toggle_animation_values('password');
-              }}
-              style={Styles.input_field}
-              placeholder="Password"
-              secureTextEntry={this.state.secureTextEntry}
-              onChangeText={(text) => {
-                this.setState({
-                  password: text,
-                });
-              }}
-            />
-            <TouchableOpacity onPress={() => this.toogleSecureTextEntry()}>
-              {this.state.secureTextEntry ? (
-                <Feather name="eye-off" color="gray" size={20} />
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <Animatable.Text
+              animation="rubberBand"
+              iterationCount="infinite"
+              iterationDelay={1000}
+              style={Styles.login_screen_login_text}>
+              LOGIN
+            </Animatable.Text>
+            <View style={Styles.login_screen_input_fields_container}>
+              {this.state.typing_animation_email ? (
+                show_typing_animation_input_fields()
               ) : (
-                <Feather name="eye" color="gray" size={20} />
+                <FontAwesome name="user" color="#EF6C00" size={30} />
               )}
+              <TextInput
+                editable={!this.state.disable_button ? true : false}
+                ref="email_input"
+                onFocus={() => {
+                  this.toggle_animation_values('email');
+                }}
+                onBlur={() => {
+                  this.toggle_animation_values('email');
+                }}
+                style={Styles.input_field}
+                placeholder="Email"
+                onChangeText={(text) => {
+                  this.setState({
+                    username: text,
+                    username_check: text,
+                  });
+                  this.textInputChange(text);
+                }}
+              />
+              {this.state.textfield_input_change_check ? (
+                <Feather name="check-circle" color="green" size={20} />
+              ) : this.state.username_check != '' ? (
+                <Feather name="x-circle" color="red" size={20} />
+              ) : null}
+            </View>
+            <View style={Styles.login_screen_input_fields_container}>
+              {this.state.typing_animation_password ? (
+                show_typing_animation_input_fields()
+              ) : (
+                <FontAwesome
+                  name="lock"
+                  color="#EF6C00"
+                  size={30}
+                  style={{paddingLeft: 2.2}}
+                />
+              )}
+              <TextInput
+                editable={!this.state.disable_button ? true : false}
+                ref="password_input"
+                onFocus={() => {
+                  this.toggle_animation_values('password');
+                }}
+                onBlur={() => {
+                  this.toggle_animation_values('password');
+                }}
+                style={Styles.input_field}
+                placeholder="Password"
+                secureTextEntry={this.state.secureTextEntry}
+                onChangeText={(text) => {
+                  this.setState({
+                    password: text,
+                  });
+                }}
+              />
+              <TouchableOpacity onPress={() => this.toogleSecureTextEntry()}>
+                {this.state.secureTextEntry ? (
+                  <Feather name="eye-off" color="gray" size={20} />
+                ) : (
+                  <Feather name="eye" color="gray" size={20} />
+                )}
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                this.setState({
+                  typing_animation_button: true,
+                  disable_button: true,
+                });
+                this.getCode();
+              }}>
+              <Text style={Styles.login_screen_forget_password}>
+                Forget password?
+              </Text>
             </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              this.setState({
-                typing_animation_button: true,
-                disable_button: true,
-              });
-              this.getCode();
-            }}>
-            <Text style={Styles.login_screen_forget_password}>
-              Forget password?
-            </Text>
-          </TouchableOpacity>
-          <TouchableWithoutFeedback
-            disabled={this.state.disable_button ? true : false}
-            onPress={() => {
-              this.sendCredentials();
-            }}
-            onPressIn={() => {
-              animationIn(this.state.animationPress);
-            }}
-            onPressOut={() => {
-              animationOut(this.state.animationPress);
-            }}>
-            <Animated.View
-              style={{width: this.state.roundButtonSize, alignSelf: 'center'}}>
+            <TouchableWithoutFeedback
+              disabled={this.state.disable_button ? true : false}
+              onPress={() => {
+                this.sendCredentials();
+              }}
+              onPressIn={() => {
+                animationIn(this.state.animationPress);
+              }}
+              onPressOut={() => {
+                animationOut(this.state.animationPress);
+              }}>
               <Animated.View
-                style={
-                  (Styles.login_screen_buttons_container,
-                  {transform: [{scale: this.state.animationPress}]})
-                }>
-                <LinearGradient
-                  colors={['#EF5350', '#F44336']}
+                style={{
+                  width: this.state.roundButtonSize,
+                  alignSelf: 'center',
+                }}>
+                <Animated.View
                   style={
-                    !this.state.setButtonBorderRoundCheck
-                      ? Styles.login_screen_buttons_container_linear_gradient
-                      : Styles.login_screen_buttons_container_linear_gradient_round
+                    (Styles.login_screen_buttons_container,
+                    {transform: [{scale: this.state.animationPress}]})
                   }>
-                  {!this.state.setButtonBorderRoundCheck ? (
-                    this.state.typing_animation_button ? (
-                      show_typing_animation_button()
+                  <LinearGradient
+                    colors={['#EF5350', '#F44336']}
+                    style={
+                      !this.state.setButtonBorderRoundCheck
+                        ? Styles.login_screen_buttons_container_linear_gradient
+                        : Styles.login_screen_buttons_container_linear_gradient_round
+                    }>
+                    {!this.state.setButtonBorderRoundCheck ? (
+                      this.state.typing_animation_button ? (
+                        show_typing_animation_button()
+                      ) : (
+                        <Text
+                          style={
+                            Styles.login_screen_buttons_container_linear_gradient_text
+                          }>
+                          Log In
+                        </Text>
+                      )
                     ) : (
-                      <Text
-                        style={
-                          Styles.login_screen_buttons_container_linear_gradient_text
-                        }>
-                        Log In
-                      </Text>
-                    )
-                  ) : (
-                    <FontAwesome name="check" color="#58d68d" size={40} />
-                  )}
-                </LinearGradient>
-              </Animated.View>
-            </Animated.View>
-          </TouchableWithoutFeedback>
-          <Text
-            onPress={() => {
-              this.props.navigation.navigate('Signup');
-            }}
-            style={Styles.login_screen_signup_text}>
-            New user? SignUp
-          </Text>
-          <View style={Styles.login_facebook_google_logo_container}>
-            <TouchableWithoutFeedback
-              disabled={this.state.disable_button ? true : false}
-              onPress={() => {
-                this.google_login();
-              }}
-              onPressIn={() => {
-                animationIn(this.state.animationPressGoogle);
-              }}
-              onPressOut={() => {
-                animationOut(this.state.animationPressGoogle);
-              }}>
-              <Animated.View
-                style={[
-                  Styles.signup_screen_image_container,
-                  {
-                    transform: [{scale: this.state.animationPressGoogle}],
-                    marginRight: 40,
-                  },
-                ]}>
-                <GoogleLogo height={50} width={50} />
+                      <FontAwesome name="check" color="#58d68d" size={40} />
+                    )}
+                  </LinearGradient>
+                </Animated.View>
               </Animated.View>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback
-              disabled={this.state.disable_button ? true : false}
+            <Text
               onPress={() => {
-                this.facebook_login();
+                this.props.navigation.navigate('Signup');
               }}
-              onPressIn={() => {
-                animationIn(this.state.animationPressFacebook);
-              }}
-              onPressOut={() => {
-                animationOut(this.state.animationPressFacebook);
-              }}>
-              <Animated.View
-                style={[
-                  Styles.signup_screen_image_container,
-                  {
-                    transform: [{scale: this.state.animationPressFacebook}],
-                    marginLeft: 40,
-                  },
-                ]}>
-                <FacebookLogo height={50} width={50} />
-              </Animated.View>
-            </TouchableWithoutFeedback>
-          </View>
+              style={Styles.login_screen_signup_text}>
+              New user? SignUp
+            </Text>
+            <View style={Styles.login_facebook_google_logo_container}>
+              <TouchableWithoutFeedback
+                disabled={this.state.disable_button ? true : false}
+                onPress={() => {
+                  this.google_login();
+                }}
+                onPressIn={() => {
+                  animationIn(this.state.animationPressGoogle);
+                }}
+                onPressOut={() => {
+                  animationOut(this.state.animationPressGoogle);
+                }}>
+                <Animated.View
+                  style={[
+                    Styles.signup_screen_image_container,
+                    {
+                      transform: [{scale: this.state.animationPressGoogle}],
+                      marginRight: 40,
+                    },
+                  ]}>
+                  <GoogleLogo height={50} width={50} />
+                </Animated.View>
+              </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback
+                disabled={this.state.disable_button ? true : false}
+                onPress={() => {
+                  this.facebook_login();
+                }}
+                onPressIn={() => {
+                  animationIn(this.state.animationPressFacebook);
+                }}
+                onPressOut={() => {
+                  animationOut(this.state.animationPressFacebook);
+                }}>
+                <Animated.View
+                  style={[
+                    Styles.signup_screen_image_container,
+                    {
+                      transform: [{scale: this.state.animationPressFacebook}],
+                      marginLeft: 40,
+                    },
+                  ]}>
+                  <FacebookLogo height={50} width={50} />
+                </Animated.View>
+              </TouchableWithoutFeedback>
+            </View>
+          </ScrollView>
         </Animatable.View>
       </KeyboardAvoidingView>
     );

@@ -81,6 +81,7 @@ class MyRecipies extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
+        // console.log(data);
         if (data.success) {
           var ia = [];
           var iq = [];
@@ -181,7 +182,7 @@ class MyRecipies extends Component {
       timerequired: [],
     });
 
-    await fetch(FETCH_URL.IP + '/favourite/getallfavouriterecipies', {
+    await fetch(FETCH_URL.IP + '/myrecipie/getallmyrecipies', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -192,7 +193,7 @@ class MyRecipies extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         if (data.success) {
           for (var q = 0; q < data.favourite.recipeId.length; q++) {
             this.state.recipe_fav_id.push(data.favourite.recipeId[q]);
@@ -286,6 +287,7 @@ class MyRecipies extends Component {
                   this.state.cuisine_type[key],
                   this.state.user_email[key],
                   this.state.timerequired[key],
+                  true,
                 );
               }}>
               <Text style={{fontFamily: 'Comfortaa-Bold'}}>View details</Text>
@@ -309,6 +311,7 @@ class MyRecipies extends Component {
     cuisine,
     useremail,
     timerequired,
+    myrecipie,
   ) {
     this.props.navigation.navigate('RecipeDetails', {
       id: id,
@@ -325,6 +328,7 @@ class MyRecipies extends Component {
       useremail: useremail,
       timerequired: timerequired,
       navigation: this.props.navigation,
+      myrecipie,
     });
   }
   render() {

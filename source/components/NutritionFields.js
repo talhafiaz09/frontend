@@ -85,6 +85,7 @@ class CustomTextField extends Component {
           <TextInput
             ref="search_bar"
             keyboardType={'numeric'}
+            value={this.props.value}
             onFocus={() => {
               this.toogle_typing_animation_textfield();
             }}

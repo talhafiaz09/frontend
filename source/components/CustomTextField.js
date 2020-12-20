@@ -95,6 +95,7 @@ class CustomTextField extends Component {
                 this.props.timerequiredFieldTextHandler(text);
               }
             }}
+            value={this.props.value}
             style={Styles.search_bar_styling}
             placeholder={this.props.placeholder}
           />

@@ -59,7 +59,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
-        // initialRouteName={'Add recipe'}
+        initialRouteName={'My recipes'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -98,6 +98,7 @@ class HomeScreen extends Component {
           name="Add recipe"
           component={this.AddRecipe}
           options={{
+            unmountOnBlur: true,
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="addfile" size={20} />
             ),
@@ -107,6 +108,7 @@ class HomeScreen extends Component {
           name="My recipes"
           component={this.MyRecipies}
           options={{
+            unmountOnBlur: true,
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="profile" size={20} />
             ),
@@ -122,7 +124,7 @@ class HomeScreen extends Component {
           }}
         />
         <Drawer.Screen
-          name="Settings"
+          name="Payment"
           component={this.Setting}
           options={{
             drawerIcon: ({color}) => (

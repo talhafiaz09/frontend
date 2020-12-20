@@ -20,6 +20,7 @@ import * as Animatable from 'react-native-animatable';
 import Video from 'react-native-video';
 import Logoimage from '../assets/images/logo.js';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
@@ -51,7 +52,7 @@ import {
 } from 'react-native-fbsdk';
 var toast_type = '';
 var toast_text = '';
-class AddRecipe extends Component {
+class EditRecipe extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -90,8 +91,8 @@ class AddRecipe extends Component {
         'Vegiterian',
       ],
       meal_check: [false, false, false, false, false, false],
-      steps: [''],
-      ingredients: [{name: '', quantity: ''}],
+      steps: [],
+      ingredients: [],
       imageData: null,
       imageName: '',
       videoData: null,
@@ -114,11 +115,87 @@ class AddRecipe extends Component {
       video: '',
       show_model: false,
       uploaderror: false,
+      recipeId: '',
     };
   }
-  componentDidMount() {
-    this.getUserInfo();
-  }
+  componentDidMount = () => {
+    console.log(this.props.route.params.mealtype);
+    for (var i = 0; i < this.props.route.params.ingredients.length; i++) {
+      this.state.ingredients.push({name: '', quantity: ''});
+      this.state.ingredients[i].name = this.props.route.params.ingredients[i];
+      this.state.ingredients[
+        i
+      ].quantity = this.props.route.params.ingredients_quantity[i];
+    }
+    if (this.props.route.params.cuisine.includes('Asian')) {
+      this.state.cusine_check[0] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Caribbean')) {
+      this.state.cusine_check[1] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Chinese')) {
+      this.state.cusine_check[2] = true;
+    }
+    if (this.props.route.params.cuisine.includes('French')) {
+      this.state.cusine_check[3] = true;
+    }
+    if (this.props.route.params.cuisine.includes('German')) {
+      this.state.cusine_check[4] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Indian & Thai')) {
+      this.state.cusine_check[5] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Italian')) {
+      this.state.cusine_check[6] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Mediterranean')) {
+      this.state.cusine_check[7] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Mexican')) {
+      this.state.cusine_check[8] = true;
+    }
+    if (this.props.route.params.cuisine.includes('Pakistani')) {
+      this.state.cusine_check[9] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Dessert')) {
+      this.state.meal_check[0] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Breakfast')) {
+      this.state.meal_check[1] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Dinner')) {
+      this.state.meal_check[2] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Lunch')) {
+      this.state.meal_check[3] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Juices & Milkshakes')) {
+      this.state.meal_check[4] = true;
+    }
+    if (this.props.route.params.mealtype.includes('Vegiterian')) {
+      this.state.meal_check[5] = true;
+    }
+    // this.state.name = this.props.route.params.name;
+    // this.state.nutrition = this.props.route.params.nutrition;
+    this.setState({
+      recipeId: this.props.route.params.id,
+      name: this.props.route.params.name,
+      imageUri: this.props.route.params.imageURl,
+      videoUri: this.props.route.params.videoURl,
+      ingredients: this.state.ingredients,
+      steps: this.props.route.params.steps,
+      imageURL: this.props.route.params.imageURl,
+      video: this.props.route.params.videoURl,
+      nutrition: this.props.route.params.nutrition,
+      useremail: this.props.route.params.useremail,
+      timerequired: this.props.route.params.timerequired,
+      meal_check: this.state.meal_check,
+      cusine_check: this.state.cusine_check,
+      mealtype: this.props.route.params.mealtype,
+      cuisine: this.props.route.params.cuisine,
+    });
+    // console.log(this.state.nutrition.proteins);
+  };
   async getUserInfo() {
     try {
       var name = await AsyncStorage.getItem('username');
@@ -287,15 +364,19 @@ class AddRecipe extends Component {
   cusinrarrayhandler(index) {
     let array = this.state.cusine_check;
     array[index] = !array[index];
-    this.setState({cusine_check: array, cuisine: []});
+    this.state.cuisine = [];
+    this.setState({cusine_check: array, cuisine: this.state.cuisine});
     let arraynames = this.state.cusine_check.reduce(
       (out, bool, index) => (bool ? out.concat(index) : out),
       [],
     );
     // console.log(arraynames);
+
     for (var i = 0; i < arraynames.length; i++) {
+      var x = this.state.cusine_name[arraynames[i]];
+      this.state.cuisine.push(x);
       this.setState({
-        cuisine: [...this.state.cuisine, this.state.cusine_name[arraynames[i]]],
+        cuisine: this.state.cuisine,
       });
     }
     // console.log(this.state.cuisine);
@@ -303,23 +384,23 @@ class AddRecipe extends Component {
   mealarrayhandler(index) {
     let array = this.state.meal_check;
     array[index] = !array[index];
-    this.setState({meal_check: array, mealtype: []});
+    this.state.mealtype = [];
+    this.setState({meal_check: array, mealtype: this.state.mealtype});
     let arraynames = this.state.meal_check.reduce(
       (out, bool, index) => (bool ? out.concat(index) : out),
       [],
     );
-    // console.log(arraynames);
     for (var i = 0; i < arraynames.length; i++) {
+      // var x = this.state.mealtype.push(i);
+      var x = this.state.meal_type[arraynames[i]];
+      this.state.mealtype.push(x);
       this.setState({
-        mealtype: [...this.state.mealtype, this.state.meal_type[arraynames[i]]],
+        mealtype: this.state.mealtype,
       });
     }
     // console.log(this.state.mealtype);
   }
   addRecipe = () => {
-    // console.log(this.state.videoData);
-    // console.log(this.state.videoName);
-    // console.log(this.state.videoData.mime);
     this.setState({show_model: true});
     let image = {
       uri: this.state.imageData.path,
@@ -359,65 +440,6 @@ class AddRecipe extends Component {
           .then((_data) => {
             console.log(_data);
             this.setState({video: _data.secure_url});
-            fetch(FETCH_URL.IP + '/recipe/addrecipefromrecipedb', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                name: this.state.name,
-                ingredients: this.state.ingredients,
-                mealtype: this.state.mealtype,
-                steps: this.state.steps,
-                cuisine: this.state.cuisine,
-                timerequired: this.state.timerequired,
-                imageURL: this.state.imageURL,
-                nutrition: this.state.nutrition,
-                video: this.state.video,
-                useremail: this.state.useremail,
-              }),
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                // console.log(data);
-                if (data.success) {
-                  fetch(FETCH_URL.IP + '/myrecipie/addtomyrecipie', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                      useremail: this.state.useremail,
-                      recipeId: data.Recipe._id,
-                    }),
-                  })
-                    .then((res) => res.json())
-                    .then((data) => {
-                      // console.log(data);
-                      if (data.success) {
-                      } else {
-                      }
-                      this.setState({show_model: false, uploaderror: false});
-                      this.props.navigation.navigate('My recipes');
-                    })
-                    .catch((error) => {
-                      console.log(error);
-                      this.setState({uploaderror: true});
-                      if ('Timeout' || 'Network request failed') {
-                      }
-                    });
-                } else {
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-                this.setState({uploaderror: true});
-                if (
-                  error.message === 'Timeout' ||
-                  error.message === 'Network request failed'
-                ) {
-                }
-              });
           })
           .catch((error) => {
             this.setState({uploaderror: true});
@@ -428,11 +450,49 @@ class AddRecipe extends Component {
         this.setState({uploaderror: true});
         console.log(error);
       });
-    // toast_text = 'Network failure';
-    // toast_type = 'error';
-    // this.setState({
-    //   toast_show: true,
-    // });
+  };
+  updateData = () => {
+    this.setState({show_model: true});
+    // console.log(this.state.mealtype);
+    fetch(
+      FETCH_URL.IP + '/recipe/updatemyrecipie/' + this.props.route.params.id,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: this.state.name,
+          ingredients: this.state.ingredients,
+          mealtype: this.state.mealtype,
+          steps: this.state.steps,
+          cuisine: this.state.cuisine,
+          timerequired: this.state.timerequired,
+          imageURL: this.state.imageURL,
+          nutrition: this.state.nutrition,
+          video: this.state.video,
+          useremail: this.state.useremail,
+        }),
+      },
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        // console.log(data);
+        if (data.success) {
+          this.setState({show_model: false, uploaderror: false});
+          this.props.route.params.navigation.pop(2);
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        this.setState({uploaderror: true});
+        if (
+          error.message === 'Timeout' ||
+          error.message === 'Network request failed'
+        ) {
+        }
+      });
   };
   nameFieldTextHandler = (text) => {
     // console.log(text);
@@ -483,7 +543,8 @@ class AddRecipe extends Component {
         toast_show: true,
       });
     } else {
-      this.addRecipe();
+      //   this.addRecipe();
+      this.updateData();
     }
     setTimeout(() => {
       this.setState({
@@ -493,7 +554,7 @@ class AddRecipe extends Component {
   };
   render() {
     return (
-      <View flex={1}>
+      <View flex={1} style={{backgroundColor: '#EF6C00'}}>
         <View style={Styles.toast_styling}>
           {toast(toast_type, toast_text)}
           {this.state.toast_show ? callToast() : null}
@@ -550,7 +611,7 @@ class AddRecipe extends Component {
                       fontSize: 18,
                       color: 'red',
                     }}>
-                    Uploading error
+                    Updating error
                   </Text>
                 </View>
               ) : (
@@ -566,7 +627,7 @@ class AddRecipe extends Component {
                       fontSize: 18,
                       marginBottom: 40,
                     }}>
-                    Uploading...
+                    Updating...
                   </Text>
                   {show_loading_animation_pantry()}
                 </View>
@@ -574,10 +635,27 @@ class AddRecipe extends Component {
             </View>
           </KeyboardAvoidingView>
         </Modal>
-        <HeaderComponent
-          navigation={this.props.navigation}
-          name={'Add Recipe'}
-        />
+        <View style={Styles.home_screen_headers}>
+          <Animatable.View animation="bounceInLeft" duration={1500}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.route.params.navigation.pop();
+              }}>
+              <AntDesign
+                style={Styles.drawer_open}
+                name="arrowleft"
+                color="white"
+                size={35}
+              />
+            </TouchableOpacity>
+          </Animatable.View>
+          <Animatable.View
+            animation="bounceInRight"
+            duration={1500}
+            style={Styles.home_screen_headers_text_container}>
+            <Text style={Styles.home_screen_headers_text}>Edit Recipie</Text>
+          </Animatable.View>
+        </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{paddingTop: 20, paddingLeft: 20, paddingRight: 20}}>
             <Animatable.View
@@ -620,6 +698,7 @@ class AddRecipe extends Component {
               placeholder={'Enter name'}
               headingName={'Name:'}
               nameFieldTextHandler={this.nameFieldTextHandler}
+              value={this.state.name}
             />
 
             <Animatable.View
@@ -917,6 +996,7 @@ class AddRecipe extends Component {
               keyboardType={'numeric'}
               headingName={'Time required(in mins):'}
               timerequiredFieldTextHandler={this.timerequiredFieldTextHandler}
+              value={this.state.timerequired}
             />
             <Animatable.View
               animation="bounceInRight"
@@ -1066,30 +1146,35 @@ class AddRecipe extends Component {
               placeholder={'Enter value '}
               headingName={'Proteins =>'}
               proteinfieldTextHandler={this.proteinfieldTextHandler}
+              value={this.state.nutrition.proteins}
             />
             <NutritionFields
               iconName={'pencil'}
               placeholder={'Enter value '}
               headingName={'Fats =>'}
               fatsfieldTextHandler={this.fatsfieldTextHandler}
+              value={this.state.nutrition.fats}
             />
             <NutritionFields
               iconName={'pencil'}
               placeholder={'Enter value '}
               headingName={'Fiber =>'}
               fiberfieldTextHandler={this.fiberfieldTextHandler}
+              value={this.state.nutrition.fiber}
             />
             <NutritionFields
               iconName={'pencil'}
               placeholder={'Enter value '}
               vitaminsfieldTextHandler={this.vitaminsfieldTextHandler}
               headingName={'Vitamins =>'}
+              value={this.state.nutrition.vitamins}
             />
             <NutritionFields
               iconName={'pencil'}
               placeholder={'Enter value '}
               carbohydratefieldTextHandler={this.carbohydratefieldTextHandler}
               headingName={'Carbohydrates =>'}
+              value={this.state.nutrition.carbohydrate}
             />
             <TouchableOpacity
               onPress={() => {
@@ -1108,7 +1193,7 @@ class AddRecipe extends Component {
                     style={
                       Styles.login_screen_buttons_container_linear_gradient_text
                     }>
-                    Add Recipe
+                    Save Recipe
                   </Text>
                 </LinearGradient>
               </View>
@@ -1120,4 +1205,4 @@ class AddRecipe extends Component {
     );
   }
 }
-export default AddRecipe;
+export default EditRecipe;
