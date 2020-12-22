@@ -12,7 +12,6 @@ import {
   Modal,
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
-import axios from 'axios';
 import ImagePicker from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import Styles from '../style/StyleSheet';
@@ -24,7 +23,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
-import RNFetchBlob from 'rn-fetch-blob';
+
 import {toast, callToast} from '../functions/Toast';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {
@@ -677,7 +676,7 @@ class EditRecipe extends Component {
                 onPress={() => {
                   this.choosePhotoFromLibrary();
                 }}>
-                <Animated.View style={Styles.add_recipe_image_container}>
+                <Animated.View style={[Styles.add_recipe_image_container, {}]}>
                   {this.state.imageUri == '' ? (
                     <AddImage
                       height={100}
@@ -686,7 +685,10 @@ class EditRecipe extends Component {
                     />
                   ) : (
                     <Image
-                      style={Styles.signup_screen_image_uploader}
+                      style={[
+                        Styles.signup_screen_image_uploader,
+                        {width: '100%', height: '100%'},
+                      ]}
                       source={{uri: this.state.imageUri}}
                     />
                   )}

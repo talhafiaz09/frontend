@@ -12,7 +12,7 @@ import {
   Modal,
 } from 'react-native';
 import {CheckBox} from 'react-native-elements';
-import axios from 'axios';
+
 import ImagePicker from 'react-native-image-crop-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import Styles from '../style/StyleSheet';
@@ -23,7 +23,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
-import RNFetchBlob from 'rn-fetch-blob';
+
 import {toast, callToast} from '../functions/Toast';
 import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import {

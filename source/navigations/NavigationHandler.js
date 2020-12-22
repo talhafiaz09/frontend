@@ -16,7 +16,6 @@ import VideoPlayer from '../components/VideoPlayer';
 import EditRecipe from '../components/EditRecipe';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
-import RecipeDetail from '../components/RecipeDetails';
 const Stack = createStackNavigator();
 class SplashToLogin extends Component {
   constructor(props) {

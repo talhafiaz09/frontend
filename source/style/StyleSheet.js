@@ -167,8 +167,6 @@ const Styles = StyleSheet.create({
     marginBottom: 10,
   },
   signup_screen_image_uploader: {
-    width: '100%',
-    height: '100%',
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',

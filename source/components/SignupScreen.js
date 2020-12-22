@@ -340,13 +340,18 @@ class SignupScreen extends Component {
               <Animated.View
                 style={[
                   Styles.signup_screen_image_container,
-                  {transform: [{scale: this.state.animationPressPicture}]},
+                  {
+                    transform: [{scale: this.state.animationPressPicture}],
+                  },
                 ]}>
                 {this.state.imageUri == '' ? (
                   <AddImage height={100} width={100} style={{marginLeft: 20}} />
                 ) : (
                   <Image
-                    style={Styles.signup_screen_image_uploader}
+                    style={[
+                      Styles.signup_screen_image_uploader,
+                      {width: 100, height: 100},
+                    ]}
                     source={{uri: this.state.imageUri}}
                   />
                 )}

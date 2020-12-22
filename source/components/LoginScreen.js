@@ -362,6 +362,7 @@ class LoginScreen extends Component {
         toast_text = 'PLay services not available';
       } else {
         // some other error happened
+        console.log(error);
       }
       this.setState({
         disable_button: false,

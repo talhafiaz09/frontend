@@ -55,12 +55,6 @@
 	<false/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>NotoSansBold.ttf</string>
-		<string>NotoSansBoldItalic.ttf</string>
-		<string>NotoSansItalic.ttf</string>
-		<string>NotoSansRegular.ttf</string>
-		<string>Lobster-Regular.ttf</string>
-		<string>lobster.ttf</string>
 		<string>Comfortaa-Bold.ttf</string>
 		<string>Comfortaa-Light.ttf</string>
 		<string>Comfortaa-Medium.ttf</string>
@@ -81,11 +75,11 @@
 		<string>MaterialCommunityIcons.ttf</string>
 		<string>MaterialIcons.ttf</string>
 		<string>Octicons.ttf</string>
-		<string>SimpleLineIcons.ttf</string>
-		<string>Zocial.ttf</string>
 		<string>Roboto_medium.ttf</string>
 		<string>Roboto.ttf</string>
 		<string>rubicon-icon-font.ttf</string>
+		<string>SimpleLineIcons.ttf</string>
+		<string>Zocial.ttf</string>
 	</array>
 </dict>
 </plist>

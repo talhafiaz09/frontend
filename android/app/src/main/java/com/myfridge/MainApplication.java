@@ -4,33 +4,34 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
-import com.fetchsky.RNTextDetector.RNTextDetectorPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.RNFetchBlob.RNFetchBlobPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.imagepicker.ImagePickerPackage;
-import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
-import com.wenkesj.voice.VoicePackage;
-import com.oblador.vectoricons.VectorIconsPackage;
-import com.wenkesj.voice.VoicePackage;
+import com.fitpassu.stripepayments.StripePaymentsPackage;
+import org.reactnative.maskedview.RNCMaskedViewPackage;
+import com.gettipsi.stripe.StripeReactPackage;
 import com.rnfloatingvideowidget.FloatingVideoWidgetPackage;
-import co.apptailor.googlesignin.RNGoogleSigninPackage;
-import io.invertase.firebase.RNFirebasePackage;
-import fr.snapp.imagebase64.RNImgToBase64Package;
+import com.brentvatne.react.ReactVideoPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.horcrux.svg.SvgPackage;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
+import com.swmansion.reanimated.ReanimatedPackage;
+import com.BV.LinearGradient.LinearGradientPackage;
+import com.reactnative.ivpusic.imagepicker.PickerPackage;
+import fr.snapp.imagebase64.RNImgToBase64Package;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import io.invertase.firebase.RNFirebasePackage;
+import com.facebook.reactnative.androidsdk.FBSDKPackage;
+import com.airbnb.android.react.lottie.LottiePackage;
+import com.wenkesj.voice.VoicePackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
+import com.reactnativecommunity.checkbox.ReactCheckBoxPackage;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import com.airbnb.android.react.lottie.LottiePackage;
-import com.wenkesj.voice.VoicePackage;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -46,8 +47,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-          packages.add(new LottiePackage());
-          // packages.add(new VoicePackage());
+        //  packages.add(new RNGoogleSigninPackage());
           return packages;
         }
 

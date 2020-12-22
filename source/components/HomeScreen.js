@@ -8,6 +8,7 @@ import {Sidebar} from '../navigations/CustomDrawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import AddRecipe from '../components/AddRecipe';
+import Payment from '../components/Payment';
 import MyRecipies from '../components/MyRecipies';
 import Voice from '@react-native-community/voice';
 const Drawer = createDrawerNavigator();
@@ -59,7 +60,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
-        initialRouteName={'My recipes'}
+        initialRouteName={'Payment'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -125,10 +126,10 @@ class HomeScreen extends Component {
         />
         <Drawer.Screen
           name="Payment"
-          component={this.Setting}
+          component={this.Payment}
           options={{
             drawerIcon: ({color}) => (
-              <AntDesign color={color} name="setting" size={20} />
+              <AntDesign color={color} name="wallet" size={20} />
             ),
           }}
         />
@@ -163,10 +164,10 @@ class HomeScreen extends Component {
       </View>
     );
   }
-  Setting({navigation}) {
+  Payment({navigation}) {
     return (
       <View animation="fadeInLeft" style={Styles.main_container}>
-        <Text></Text>
+        <Payment navigation={navigation} />
       </View>
     );
   }

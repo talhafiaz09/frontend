@@ -21,17 +21,14 @@ export default class VideoPlayer extends React.Component {
       granted: false,
     };
     componentDidMount = () => {
-      BackAndroid.addEventListener('hardwareBackPress', () => {
-        this.props.route.params.navigation.pop();
-        return true;
-      });
+      console.log(this.props.route.params.video);
     };
     // The Data Object
     this.data = {
       video: {
-        // url:
-        //   'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        url: this.props.route.params.video,
+        url:
+          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+        // url: this.props.route.params.video,
       },
       // seek: 10,
       // index: 0,
