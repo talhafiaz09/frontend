@@ -48,6 +48,8 @@ target 'MyFridge' do
 
   pod 'react-native-stripe-payments', :path => '../node_modules/react-native-stripe-payments'
 
+  pod 'RNTextDetector', :path => '../node_modules/react-native-text-detector'
+
   target 'MyFridgeTests' do
     inherit! :complete
     # Pods for testing

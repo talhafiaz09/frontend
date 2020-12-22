@@ -272,7 +272,6 @@ class AddRecipe extends Component {
   chooseVideoFromLibrary() {
     ImagePicker.openPicker({
       mediaType: 'video',
-      // duration: 60000,
     })
       .then((video) => {
         // console.log(video);
@@ -608,7 +607,10 @@ class AddRecipe extends Component {
                     />
                   ) : (
                     <Image
-                      style={Styles.signup_screen_image_uploader}
+                      style={[
+                        Styles.signup_screen_image_uploader,
+                        {width: '100%', height: '100%'},
+                      ]}
                       source={{uri: this.state.imageUri}}
                     />
                   )}

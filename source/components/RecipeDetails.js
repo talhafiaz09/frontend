@@ -653,6 +653,28 @@ class RecipeDetails extends Component {
               </View>
               <View>{this.mapSteps()}</View>
             </View>
+            {this.props.route.params.useremail ? (
+              <View>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 24,
+                    marginTop: 20
+                  }}>
+                  Added by:
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Comfortaa-Bold',
+                    fontSize: 16,
+                    marginTop: 10,
+                    alignSelf: 'center',
+                    color: 'red',
+                  }}>
+                  {this.props.route.params.useremail}
+                </Text>
+              </View>
+            ) : null}
             <View style={{marginTop: 50}}>
               <View>
                 <Text

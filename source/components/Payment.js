@@ -31,6 +31,7 @@ import {
   show_loading_animation_pantry,
   show_typing_animation_button,
 } from '../functions/FunctionHandler';
+import AsyncStorage from '@react-native-community/async-storage';
 import {
   CreditCardInput,
   LiteCreditCardInput,
@@ -41,11 +42,12 @@ export default class Payment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: true,
+      disabled: false,
       toast_show: false,
       number: '',
       expiry: '',
       cvc: '',
+      useremail: '',
     };
   }
   _onChange = (form) => {
@@ -60,31 +62,19 @@ export default class Payment extends React.Component {
     }
   };
   validCard = () => {
-    const cardDetails = {
-      number: '4242424242424242',
-      expMonth: 10,
-      expYear: 21,
-      cvc: '888',
-    };
     const isCardValid = stripe.isCardValid({
       number: '4242424242424242',
       expMonth: 10,
       expYear: 21,
       cvc: '888',
     });
-    // const cardDetails = {
-    //   number: '4242424242424242',
-    //   expMonth: 10,
-    //   expYear: 21,
-    //   cvc: '888',
-    // };
-    // console.log(parseInt(this.state.expiry.split('/')[0]));
     if (isCardValid) {
       toast_type = 'success';
       toast_text = 'Payment made';
       this.setState({
         toast_show: true,
       });
+      this.updateUser();
     } else {
       toast_type = 'error';
       toast_text = 'Invalid card';
@@ -97,6 +87,46 @@ export default class Payment extends React.Component {
         toast_show: false,
       });
     }, 500);
+  };
+  componentDidMount = () => {
+    this.getUserInfo();
+  };
+  async getUserInfo() {
+    try {
+      var email = await AsyncStorage.getItem('username');
+      this.setState({
+        useremail: email,
+      });
+    } catch (err) {}
+  }
+  updateUser = () => {
+    fetch(FETCH_URL.IP + '/user/updateuserpremium', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({useremail: this.state.useremail}),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setTimeout(() => {
+            this.setState({
+              toast_show: false,
+            });
+            this.props.navigation.navigate('Home');
+          }, 500);
+        }
+      })
+      .catch((error) => {
+        if ('Timeout' || 'Network request failed') {
+          toast_type = 'error';
+          toast_text = 'Network failure';
+          this.setState({
+            toast_show: true,
+          });
+        }
+      });
   };
   render() {
     return (

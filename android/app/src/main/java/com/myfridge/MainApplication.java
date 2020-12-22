@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
+import com.fetchsky.RNTextDetector.RNTextDetectorPackage;
 import com.fitpassu.stripepayments.StripePaymentsPackage;
 import org.reactnative.maskedview.RNCMaskedViewPackage;
 import com.gettipsi.stripe.StripeReactPackage;
@@ -47,7 +48,7 @@ public class MainApplication extends Application implements ReactApplication {
           List<ReactPackage> packages = new PackageList(this).getPackages();
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
-        //  packages.add(new RNGoogleSigninPackage());
+//         packages.add(new RNGoogleSigninPackage());
           return packages;
         }
 

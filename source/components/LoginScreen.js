@@ -296,6 +296,7 @@ class LoginScreen extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success || data.error.name == 'UserExistsError') {
+          console.log(data);
           this.roundButtonAnimation();
         } else {
           this.setState({

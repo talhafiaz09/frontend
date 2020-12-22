@@ -8,6 +8,7 @@ import {Sidebar} from '../navigations/CustomDrawer';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import AsyncStorage from '@react-native-community/async-storage';
 import AddRecipe from '../components/AddRecipe';
+import ImageToText from '../components/ImageToText';
 import Payment from '../components/Payment';
 import MyRecipies from '../components/MyRecipies';
 import Voice from '@react-native-community/voice';
@@ -22,10 +23,30 @@ class HomeScreen extends Component {
       off: null,
     };
   }
-
+  componentDidMount = () => {
+    fetch(FETCH_URL.IP + '/user/finduser' + this.state.username, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+        }
+      })
+      .catch((error) => {
+        if ('Timeout' || 'Network request failed') {
+          toast_type = 'error';
+          toast_text = 'Network failure';
+          this.setState({
+            toast_show: true,
+          });
+        }
+      });
+  };
   UNSAFE_componentWillMount() {
     this.getUserInfo();
-    // this.getExtraInfo();
   }
   async getExtraInfo() {
     try {
@@ -60,7 +81,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
-        initialRouteName={'Payment'}
+        initialRouteName={'Image to Recipe'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -174,7 +195,7 @@ class HomeScreen extends Component {
   Image_to_text({navigation}) {
     return (
       <View animation="fadeInLeft" style={Styles.main_container}>
-        <Text></Text>
+        <ImageToText navigation={navigation} />
       </View>
     );
   }

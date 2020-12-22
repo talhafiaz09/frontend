@@ -20,29 +20,14 @@ export default class VideoPlayer extends React.Component {
       floating: false,
       granted: false,
     };
-    componentDidMount = () => {
-      console.log(this.props.route.params.video);
-    };
-    // The Data Object
     this.data = {
       video: {
-        url:
-          'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-        // url: this.props.route.params.video,
+        url: this.props.route.params.video,
       },
-      // seek: 10,
-      // index: 0,
     };
-    // BackHandler.addEventListener(
-    //   'hardwareBackPress',
-    //   this.handleBackButton.bind(this),
-    // );
   }
-  handleBackButton = () => {
-    // this.props.navigation.pop();
-  };
   componentDidMount() {
-    // Add event listeners
+    console.log(this.props.route.params.video);
     FloatingVideo.onClose((data) => console.log(data));
     FloatingVideo.onOpen((data) => console.log(data));
     FloatingVideo.onPlay((data) => console.log(data));
