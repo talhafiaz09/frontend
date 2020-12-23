@@ -519,7 +519,7 @@ const Styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'black',
     width: '100%',
-    height: '90%',
+    height: 200,
   },
   other_recipies_text: {
     marginLeft: 10,

@@ -308,13 +308,13 @@ class RecipeDetails extends Component {
   }
   render() {
     return (
-      <Animated.View animaton="bounceInLeft" style={Styles.main_container}>
+      <View style={Styles.main_container}>
         {/* {console.log(this.props.route.params.nutrition.proteins)} */}
         <View style={Styles.toast_styling}>
           {toast(toast_type, toast_text)}
           {this.state.toast_show ? callToast() : null}
         </View>
-        <Animated.View flex={0.4}>
+        <View flex={0.4}>
           <ImageBackground
             source={{
               uri: this.props.route.params.images,
@@ -347,8 +347,8 @@ class RecipeDetails extends Component {
               </Animatable.View>
             </View>
           </ImageBackground>
-        </Animated.View>
-        <Animatable.View style={Styles.recipe_detail_screens_bottom}>
+        </View>
+        <View style={Styles.recipe_detail_screens_bottom}>
           <View style={Styles.recipe_rating_container}>
             <View style={Styles.recipe_detail_view_name_container}>
               <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 22}}>
@@ -659,7 +659,7 @@ class RecipeDetails extends Component {
                   style={{
                     fontFamily: 'Comfortaa-Bold',
                     fontSize: 24,
-                    marginTop: 20
+                    marginTop: 20,
                   }}>
                   Added by:
                 </Text>
@@ -723,6 +723,28 @@ class RecipeDetails extends Component {
                 )}
               </View>
             </View>
+            {this.state.useremail !== this.props.route.params.useremail ? (
+              <TouchableOpacity onPress={() => {}}>
+                <View
+                  style={[
+                    Styles.login_screen_buttons_container,
+                    {width: '100%', height: 50},
+                  ]}>
+                  <LinearGradient
+                    colors={['#003152', '#1D2951']}
+                    style={
+                      Styles.login_screen_buttons_container_linear_gradient
+                    }>
+                    <Text
+                      style={
+                        Styles.login_screen_buttons_container_linear_gradient_text
+                      }>
+                      Report
+                    </Text>
+                  </LinearGradient>
+                </View>
+              </TouchableOpacity>
+            ) : null}
             {this.props.route.params.myrecipie ? (
               <View
                 style={{
@@ -797,8 +819,8 @@ class RecipeDetails extends Component {
             ) : null}
             <View style={{marginBottom: 40}}></View>
           </ScrollView>
-        </Animatable.View>
-      </Animated.View>
+        </View>
+      </View>
     );
   }
 }

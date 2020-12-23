@@ -11,6 +11,16 @@ import AddRecipe from '../components/AddRecipe';
 import ImageToText from '../components/ImageToText';
 import Payment from '../components/Payment';
 import MyRecipies from '../components/MyRecipies';
+import {
+  width,
+  email_regex,
+  animationIn,
+  animationOut,
+  FETCH_URL,
+  show_typing_animation_input_fields,
+  show_loading_animation_pantry,
+  show_typing_animation_button,
+} from '../functions/FunctionHandler';
 import Voice from '@react-native-community/voice';
 const Drawer = createDrawerNavigator();
 class HomeScreen extends Component {
@@ -21,30 +31,9 @@ class HomeScreen extends Component {
       imageUri: '',
       info: null,
       off: null,
+      premium: false,
     };
   }
-  componentDidMount = () => {
-    fetch(FETCH_URL.IP + '/user/finduser' + this.state.username, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-        }
-      })
-      .catch((error) => {
-        if ('Timeout' || 'Network request failed') {
-          toast_type = 'error';
-          toast_text = 'Network failure';
-          this.setState({
-            toast_show: true,
-          });
-        }
-      });
-  };
   UNSAFE_componentWillMount() {
     this.getUserInfo();
   }
@@ -81,7 +70,7 @@ class HomeScreen extends Component {
   render() {
     return (
       <Drawer.Navigator
-        initialRouteName={'Image to Recipe'}
+        // initialRouteName={'Image to Recipe'}
         drawerContentOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.navigation_label_Styles,
@@ -99,6 +88,7 @@ class HomeScreen extends Component {
         <Drawer.Screen
           name="Home"
           component={this.Home}
+          listeners={{}}
           options={{
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="home" size={20} />
@@ -140,6 +130,7 @@ class HomeScreen extends Component {
           name="Image to Recipe"
           component={this.Image_to_text}
           options={{
+            unmountOnBlur: true,
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="camerao" size={20} />
             ),
@@ -149,6 +140,7 @@ class HomeScreen extends Component {
           name="Payment"
           component={this.Payment}
           options={{
+            unmountOnBlur: true,
             drawerIcon: ({color}) => (
               <AntDesign color={color} name="wallet" size={20} />
             ),

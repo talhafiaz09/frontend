@@ -24,7 +24,9 @@ import {
   FETCH_URL,
 } from '../functions/FunctionHandler';
 import {toast, callToast} from '../functions/Toast';
-import {ScrollView} from 'react-native-gesture-handler';
+import {FlatList, ScrollView} from 'react-native-gesture-handler';
+import SearchedTypedData from '../components/SearchedTypedData';
+import RecipieVoiceSearch from './RecipieVoiceSearch';
 var toast_type = '';
 var toast_text = '';
 class Recipe extends Component {
@@ -50,8 +52,57 @@ class Recipe extends Component {
       recipe_video: [],
       user_email: [],
       timerequired: [],
+      searchbarText: '',
+      searchedTyped: false,
+      searchedTypedResult: [],
+      microphonePressed: false,
+      arrayDessert: [],
+      arrayBreakfast: [],
+      arrayDinner: [],
+      arrayLunch: [],
+      arrayJuicesMilkshakes: [],
+      arrayVegiterian: [],
     };
   }
+  microphonePressedHandler = () => {
+    this.state.microphonePressed
+      ? this.setState({microphonePressed: false})
+      : this.setState({microphonePressed: true});
+  };
+  typingvoiceSearch = (text) => {
+    this.setState({
+      searchedTypedResult: [],
+    });
+    console.log(text);
+    fetch(FETCH_URL.IP + '/recipe/typedvoicesearch/' + text, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (data.success) {
+          this.setState({
+            searchedTyped: true,
+            searchedTypedResult: data.filtered,
+          });
+        }
+      })
+      .catch((error) => {
+        if ('Timeout' || 'Network request failed') {
+          toast_type = 'error';
+          toast_text = 'Network failure';
+          this.setState({
+            toast_show: true,
+          });
+        }
+      });
+  };
+  textHandler = (text) => {
+    this.setState({searchbarText: text});
+  };
   // async getRecipeApiData() {
   //   await fetch(FETCH_URL.IP + '/recipe/getrecipiesfromapi', {
   //     method: 'GET',
@@ -82,17 +133,17 @@ class Recipe extends Component {
   //     });
   //   }, 500);
   // }
-  // toogle_typing_animation_search_bar() {
-  //   if (this.state.typing_animation_search_bar) {
-  //     this.setState({
-  //       typing_animation_search_bar: false,
-  //     });
-  //   } else {
-  //     this.setState({
-  //       typing_animation_search_bar: true,
-  //     });
-  //   }
-  // }
+  toogle_typing_animation_search_bar() {
+    if (this.state.typing_animation_search_bar) {
+      this.setState({
+        typing_animation_search_bar: false,
+      });
+    } else {
+      this.setState({
+        typing_animation_search_bar: true,
+      });
+    }
+  }
   async getRecipiesfromDatabase() {
     await fetch(FETCH_URL.IP + '/recipe/getallrecipiefromdb/', {
       method: 'GET',
@@ -127,7 +178,33 @@ class Recipe extends Component {
             ia = [];
             iq = [];
           }
-          // console.log(this.state.user_email);
+          var aDessert = data.recipies.filter((I) => {
+            return I.mealtype.includes('Dessert');
+          });
+          var aBreakfast = data.recipies.filter((I) => {
+            return I.mealtype.includes('Breakfast');
+          });
+          var aDinner = data.recipies.filter((I) => {
+            return I.mealtype.includes('Dinner');
+          });
+          var aLunch = data.recipies.filter((I) => {
+            return I.mealtype.includes('Lunch');
+          });
+          var aJuicesMilkshakes = data.recipies.filter((I) => {
+            return I.mealtype.includes('Juices & Milkshakes');
+          });
+          var aVegiterian = data.recipies.filter((I) => {
+            return I.mealtype.includes('Vegiterian');
+          });
+          this.setState({
+            arrayDessert: aDessert,
+            arrayBreakfast: aBreakfast,
+            arrayDinner: aDinner,
+            arrayLunch: aLunch,
+            arrayJuicesMilkshakes: aJuicesMilkshakes,
+            arrayVegiterian: aVegiterian,
+          });
+          // console.log(this.state.arrayDessert.length);
         } else {
           // console.log(data);
         }
@@ -163,7 +240,7 @@ class Recipe extends Component {
     useremail,
     timerequired,
   ) {
-    console.log(video);
+    // console.log(video);
     this.props.navigation.navigate('RecipeDetails', {
       id: id,
       name: name,
@@ -251,6 +328,7 @@ class Recipe extends Component {
       .then((res) => res.json())
       .then((data) => {
         if (data.success && data.found) {
+          // console.log(data.filteredResults);
           this.setState({
             gotdataFromParams: true,
             filteredResults: data.filteredResults,
@@ -281,6 +359,98 @@ class Recipe extends Component {
       });
     }, 500);
   }
+  mapDessert = ({item, index}) => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            var arr1 = [];
+            var arr2 = [];
+            for (var i = 0; i < item.ingredients.length; i++) {
+              arr2.push(item.ingredients.quantity);
+              arr1.push(item.ingredients.name);
+            }
+            this.viewRecipeDetails(
+              item._id,
+              item.name,
+              item.rating,
+              arr1,
+              arr2,
+              item.steps,
+              item.imageURL,
+              item.nutrition,
+              item.video,
+              item.mealtype,
+              item.cuisine,
+              item.useremail,
+              item.timerequired,
+            );
+          }}>
+          <View
+            style={{
+              width: 200,
+              marginRight: 20,
+            }}>
+            <View style={Styles.other_recipies_image_viewer}>
+              <Image
+                style={Styles.recipie_image_styling}
+                source={{
+                  uri: item.imageURL,
+                }}
+              />
+            </View>
+            <Text style={Styles.other_recipies_text}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  mapBreakfast = ({item, index}) => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            var arr1 = [];
+            var arr2 = [];
+            for (var i = 0; i < item.ingredients.length; i++) {
+              arr2.push(item.ingredients.quantity);
+              arr1.push(item.ingredients.name);
+            }
+            this.viewRecipeDetails(
+              item._id,
+              item.name,
+              item.rating,
+              arr1,
+              arr2,
+              item.steps,
+              item.imageURL,
+              item.nutrition,
+              item.video,
+              item.mealtype,
+              item.cuisine,
+              item.useremail,
+              item.timerequired,
+            );
+          }}>
+          <View
+            style={{
+              width: 200,
+              marginRight: 20,
+            }}>
+            <View style={Styles.other_recipies_image_viewer}>
+              <Image
+                style={Styles.recipie_image_styling}
+                source={{
+                  uri: item.imageURL,
+                }}
+              />
+            </View>
+            <Text style={Styles.other_recipies_text}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   render() {
     return (
       <View style={Styles.main_container}>
@@ -322,9 +492,13 @@ class Recipe extends Component {
               )}
               <TextInput
                 ref="search_bar"
+                value={this.state.searchbarText}
                 onFocus={() => {
                   this.setState({toast_show: false});
                   this.toogle_typing_animation_search_bar();
+                }}
+                onChangeText={(text) => {
+                  this.setState({searchbarText: text});
                 }}
                 onBlur={() => {
                   this.toogle_typing_animation_search_bar();
@@ -335,6 +509,8 @@ class Recipe extends Component {
               <TouchableOpacity
                 onPress={() => {
                   this.refs['search_bar'].blur();
+                  this.typingvoiceSearch(this.state.searchbarText);
+                  // console.log(this.state.searchbarText);
                 }}>
                 <MaterialCommunityIcons
                   style={{paddingLeft: 10}}
@@ -347,6 +523,7 @@ class Recipe extends Component {
             <TouchableOpacity
               onPress={() => {
                 this.refs['search_bar'].blur();
+                this.setState({microphonePressed: true});
               }}>
               <Animatable.View
                 animation="bounceInRight"
@@ -363,6 +540,14 @@ class Recipe extends Component {
             </TouchableOpacity>
           </View>
         </View>
+        {this.state.microphonePressed ? (
+          <RecipieVoiceSearch
+            microphonePressed={this.state.microphonePressed}
+            microphonePressedHandler={this.microphonePressedHandler}
+            typingvoiceSearch={this.typingvoiceSearch}
+            textHandler={this.textHandler}
+          />
+        ) : null}
         <Animatable.View
           delay={400}
           duration={1500}
@@ -387,94 +572,141 @@ class Recipe extends Component {
               {show_loading_animation_pantry()}
             </View>
           ) : (
-            <ScrollView showsVerticalScrollIndicator={false}>
-              {this.state.gotParams && !this.state.gotdataFromParams ? (
+            <View style={{flex: 1}}>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                {this.state.searchedTyped &&
+                this.state.searchedTypedResult.length === 0 ? (
+                  <View style={{}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                        Searched:
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        height: 100,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 18}}>
+                        Oops no recipie to show
+                      </Text>
+                    </View>
+                  </View>
+                ) : this.state.searchedTyped &&
+                  this.state.searchedTypedResult.length !== 0 ? (
+                  <View style={{}}>
+                    <View
+                      style={{
+                        height: 50,
+                        justifyContent: 'center',
+                        marginBottom: 20,
+                      }}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                        Searched:
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <SearchedTypedData
+                        navigation={this.props.navigation}
+                        filteredResults={this.state.searchedTypedResult}
+                      />
+                    </View>
+                  </View>
+                ) : null}
+                {this.state.gotParams && !this.state.gotdataFromParams ? (
+                  <View style={{}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                        Pantry Searched:
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        height: 100,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 18}}>
+                        Oops no recipie to show
+                      </Text>
+                    </View>
+                  </View>
+                ) : this.state.gotParams && this.state.gotdataFromParams ? (
+                  <View style={{}}>
+                    <View
+                      style={{
+                        height: 50,
+                        justifyContent: 'center',
+                        marginBottom: 20,
+                      }}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
+                        Pantry Searched:
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <PantryFilteredRecipies
+                        navigation={this.props.navigation}
+                        filteredResults={this.state.filteredResults}
+                        ingredients_exist={this.state.ingredients_exist}
+                      />
+                    </View>
+                  </View>
+                ) : null}
                 <View style={{}}>
                   <View style={{height: 50, justifyContent: 'center'}}>
                     <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                      Searched:
+                      5 star recipies:
                     </Text>
                   </View>
-                  <View
-                    style={{
-                      height: 100,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 18}}>
-                      Oops no recipie to show
-                    </Text>
+                  <View style={{width: '100%'}}>
+                    <ScrollView
+                      horizontal={true}
+                      showsHorizontalScrollIndicator={false}
+                      style={Styles.five_star_recipies}>
+                      {/* Copy this view from here*/}
+                      {this.mapRecommendedRecipies()}
+                      {/* Copy this view to here*/}
+                    </ScrollView>
                   </View>
                 </View>
-              ) : this.state.gotParams && this.state.gotdataFromParams ? (
-                <View style={{}}>
-                  <View
-                    style={{
-                      height: 50,
-                      justifyContent: 'center',
-                      marginBottom: 20,
-                    }}>
-                    <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                      Searched:
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                    <PantryFilteredRecipies
-                      navigation={this.props.navigation}
-                      filteredResults={this.state.filteredResults}
-                      ingredients_exist={this.state.ingredients_exist}
-                    />
-                  </View>
-                </View>
-              ) : null}
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                    5 star recipies:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.five_star_recipies}>
-                    {/* Copy this view from here*/}
-                    {this.mapRecommendedRecipies()}
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-              <View style={{}}>
-                <View style={{height: 50, justifyContent: 'center'}}>
-                  <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
-                    Desserts:
-                  </Text>
-                </View>
-                <View style={{width: '100%'}}>
-                  <ScrollView
-                    horizontal={true}
-                    showsHorizontalScrollIndicator={false}
-                    style={Styles.other_recipies}>
-                    {/* Copy this view from here*/}
-                    <View
-                      style={{
-                        width: 200,
-                        marginRight: 20,
-                      }}>
-                      <View style={Styles.other_recipies_image_viewer}></View>
-                      <Text style={Styles.other_recipies_text}>
-                        Salam Walikum
+                {this.state.arrayDessert.length > 0 ? (
+                  <View style={{flex: 1}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                        Desserts:
                       </Text>
                     </View>
-                    {/* Copy this view to here*/}
-                  </ScrollView>
-                </View>
-              </View>
-            </ScrollView>
+                    <View>
+                      <FlatList
+                        horizontal={true}
+                        style={{height: '100%'}}
+                        showsHorizontalScrollIndicator={false}
+                        data={this.state.arrayDessert}
+                        renderItem={this.mapDessert}
+                        keyExtractor={(item, index) => index.toString()}
+                      />
+                    </View>
+                  </View>
+                ) : null}
+                <View style={{margin: 20}}></View>
+              </ScrollView>
+            </View>
           )}
         </Animatable.View>
       </View>

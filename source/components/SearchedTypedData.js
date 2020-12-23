@@ -26,7 +26,7 @@ import {toast, callToast} from '../functions/Toast';
 import {ScrollView} from 'react-native-gesture-handler';
 var toast_type = '';
 var toast_text = '';
-class PantryFilteredRecipies extends Component {
+class SearchedTypedData extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -81,11 +81,11 @@ class PantryFilteredRecipies extends Component {
           this.props.filteredResults[q].timerequired,
         );
         // console.log(this.state.meal_type);
-        for (var y = 0; y < this.props.ingredients_exist[q].length; y++) {
-          ex.push(this.props.ingredients_exist[q][y].name);
-        }
-        this.state.ingredients_exist.push(ex);
-        ex = [];
+        // for (var y = 0; y < this.props.ingredients_exist[q].length; y++) {
+        //   ex.push(this.props.ingredients_exist[q][y].name);
+        // }
+        // this.state.ingredients_exist.push(ex);
+        // ex = [];
         ia = [];
         iq = [];
       }
@@ -93,7 +93,7 @@ class PantryFilteredRecipies extends Component {
     }
   }
   mapIngredients(index) {
-    return this.state.ingredients_exist[index].map((data, key) => {
+    return this.state.recipe_ingredients[index].map((data, key) => {
       return (
         <View key={key} style={Styles.ingredients_view_list_styling}>
           <Text style={Styles.ingredients_view_list_text_styling}>{data}</Text>
@@ -200,4 +200,4 @@ class PantryFilteredRecipies extends Component {
     );
   }
 }
-export default PantryFilteredRecipies;
+export default SearchedTypedData;

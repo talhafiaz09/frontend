@@ -65,7 +65,6 @@ class VoiceModal extends Component {
   componentDidMount() {
     this.fetchUserPantries();
   }
-  UNSAFE_componentWillMount() {}
   async fetchUserPantries() {
     await fetch(
       FETCH_URL.IP + '/pantry/userallpantries/' + this.props.username,

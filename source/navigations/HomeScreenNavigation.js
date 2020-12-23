@@ -24,7 +24,7 @@ class HomeScreenNavigation extends Component {
   render() {
     return (
       <Tabs.Navigator
-        // initialRouteName="Shopping List"
+        // initialRouteName="Recipe"
         tabBarOptions={{
           activeTintColor: 'red',
           labelStyle: Styles.bottom_navigation_label_Styles,

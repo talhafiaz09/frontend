@@ -14,6 +14,7 @@ import ForgetPassword from '../components/ForgetPassword';
 import RecipeDetails from '../components/RecipeDetails';
 import VideoPlayer from '../components/VideoPlayer';
 import EditRecipe from '../components/EditRecipe';
+import ImagetoTextEdit from '../components/ImagetoTextEdit';
 import * as Animatable from 'react-native-animatable';
 import AsyncStorage from '@react-native-community/async-storage';
 const Stack = createStackNavigator();
@@ -91,6 +92,11 @@ class SplashToLogin extends Component {
             <Stack.Screen
               name="Editrecipe"
               component={EditRecipe}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="ImagetoTextEdit"
+              component={ImagetoTextEdit}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

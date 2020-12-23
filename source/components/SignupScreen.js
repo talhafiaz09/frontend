@@ -220,7 +220,7 @@ class SignupScreen extends Component {
           this.setState({
             typing_animation_button: false,
           });
-          // console.log(data);
+          console.log(data);
           if (data.success) {
             this.props.navigation.replace('VerificationCodeScreen', {
               check: 'signup',

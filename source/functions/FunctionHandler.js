@@ -4,8 +4,8 @@ import {Animated} from 'react-native';
 import {TypingAnimation} from 'react-native-typing-animation';
 export const FETCH_URL = {
   //Phone
-  IP: 'http://192.168.1.106:3000',
-  // IP: 'https://my-fridge09.herokuapp.com',
+  // IP: 'http://192.168.18.48:3000',
+  IP: 'https://my-fridge09.herokuapp.com',
   //Emulator
   // IP: 'http://10.0.2.2:3000',
 };
