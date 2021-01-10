@@ -98,7 +98,7 @@ class ImageToText extends Component {
   detectText = async () => {
     try {
       const options = {
-        quality: 0.8,
+        quality: 20,
         base64: true,
         skipProcessing: true,
       };
@@ -106,6 +106,7 @@ class ImageToText extends Component {
       const visionResp = await RNTextDetector.detectFromUri(
         this.state.imageUri,
       );
+
       var steps = [];
       var ingredient = [];
       if (visionResp.length !== 0) {
@@ -256,7 +257,7 @@ class ImageToText extends Component {
                         style={
                           Styles.login_screen_buttons_container_linear_gradient_text
                         }>
-                        Scrap recipie
+                        Convert to text
                       </Text>
                     </LinearGradient>
                   </View>

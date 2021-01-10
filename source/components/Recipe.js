@@ -405,7 +405,99 @@ class Recipe extends Component {
       </View>
     );
   };
+  mapDinner = ({item, index}) => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            var arr1 = [];
+            var arr2 = [];
+            for (var i = 0; i < item.ingredients.length; i++) {
+              arr2.push(item.ingredients.quantity);
+              arr1.push(item.ingredients.name);
+            }
+            this.viewRecipeDetails(
+              item._id,
+              item.name,
+              item.rating,
+              arr1,
+              arr2,
+              item.steps,
+              item.imageURL,
+              item.nutrition,
+              item.video,
+              item.mealtype,
+              item.cuisine,
+              item.useremail,
+              item.timerequired,
+            );
+          }}>
+          <View
+            style={{
+              width: 200,
+              marginRight: 20,
+            }}>
+            <View style={Styles.other_recipies_image_viewer}>
+              <Image
+                style={Styles.recipie_image_styling}
+                source={{
+                  uri: item.imageURL,
+                }}
+              />
+            </View>
+            <Text style={Styles.other_recipies_text}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
   mapBreakfast = ({item, index}) => {
+    return (
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            var arr1 = [];
+            var arr2 = [];
+            for (var i = 0; i < item.ingredients.length; i++) {
+              arr2.push(item.ingredients.quantity);
+              arr1.push(item.ingredients.name);
+            }
+            this.viewRecipeDetails(
+              item._id,
+              item.name,
+              item.rating,
+              arr1,
+              arr2,
+              item.steps,
+              item.imageURL,
+              item.nutrition,
+              item.video,
+              item.mealtype,
+              item.cuisine,
+              item.useremail,
+              item.timerequired,
+            );
+          }}>
+          <View
+            style={{
+              width: 200,
+              marginRight: 20,
+            }}>
+            <View style={Styles.other_recipies_image_viewer}>
+              <Image
+                style={Styles.recipie_image_styling}
+                source={{
+                  uri: item.imageURL,
+                }}
+              />
+            </View>
+            <Text style={Styles.other_recipies_text}>{item.name}</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  mapLunch = ({item, index}) => {
     return (
       <View>
         <TouchableOpacity
@@ -553,15 +645,15 @@ class Recipe extends Component {
           duration={1500}
           animation="bounceInUp"
           style={Styles.home_screens_bottom}>
-          <View style={{height: 60}}>
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              {/* Copy this view from here*/}
-              <View style={{}}>{/* <Text>Tags here</Text> */}</View>
-              {/* Copy this view ti here*/}
-            </ScrollView>
-          </View>
+          {/* <View style={{height: 60}}> */}
+          {/* <ScrollView */}
+          {/* // horizontal={true} */}
+          {/* // showsHorizontalScrollIndicator={false}> */}
+          {/* Copy this view from here */}
+          {/* <View style={{}}><Text>Tags here</Text></View> */}
+          {/* Copy this view ti here*/}
+          {/* </ScrollView> */}
+          {/* </View> */}
           {this.state.recipe_names.length == 0 ? (
             <View
               style={{
@@ -670,7 +762,7 @@ class Recipe extends Component {
                 <View style={{}}>
                   <View style={{height: 50, justifyContent: 'center'}}>
                     <Text style={{fontFamily: 'Comfortaa-Bold', fontSize: 24}}>
-                      5 star recipies:
+                      Common recipies:
                     </Text>
                   </View>
                   <View style={{width: '100%'}}>
@@ -699,6 +791,66 @@ class Recipe extends Component {
                         showsHorizontalScrollIndicator={false}
                         data={this.state.arrayDessert}
                         renderItem={this.mapDessert}
+                        keyExtractor={(item, index) => index.toString()}
+                      />
+                    </View>
+                  </View>
+                ) : null}
+                {this.state.arrayDinner.length > 0 ? (
+                  <View style={{flex: 1}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                        Dinner:
+                      </Text>
+                    </View>
+                    <View>
+                      <FlatList
+                        horizontal={true}
+                        style={{height: '100%'}}
+                        showsHorizontalScrollIndicator={false}
+                        data={this.state.arrayDinner}
+                        renderItem={this.mapDinner}
+                        keyExtractor={(item, index) => index.toString()}
+                      />
+                    </View>
+                  </View>
+                ) : null}
+                {this.state.arrayBreakfast.length > 0 ? (
+                  <View style={{flex: 1}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                        Breakfast:
+                      </Text>
+                    </View>
+                    <View>
+                      <FlatList
+                        horizontal={true}
+                        style={{height: '100%'}}
+                        showsHorizontalScrollIndicator={false}
+                        data={this.state.arrayBreakfast}
+                        renderItem={this.mapBreakfast}
+                        keyExtractor={(item, index) => index.toString()}
+                      />
+                    </View>
+                  </View>
+                ) : null}
+                {this.state.arrayLunch.length > 0 ? (
+                  <View style={{flex: 1}}>
+                    <View style={{height: 50, justifyContent: 'center'}}>
+                      <Text
+                        style={{fontFamily: 'Comfortaa-Bold', fontSize: 20}}>
+                        Lunch:
+                      </Text>
+                    </View>
+                    <View>
+                      <FlatList
+                        horizontal={true}
+                        style={{height: '100%'}}
+                        showsHorizontalScrollIndicator={false}
+                        data={this.state.arrayLunch}
+                        renderItem={this.mapLunch}
                         keyExtractor={(item, index) => index.toString()}
                       />
                     </View>

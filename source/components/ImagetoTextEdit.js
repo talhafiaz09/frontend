@@ -40,6 +40,7 @@ import FacebookLogo from '../assets/images/facebook.js';
 import GoogleLogo from '../assets/images/google.js';
 import ImgToBase64 from 'react-native-image-base64';
 import CustomTextField from './CustomTextField';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import NutritionFields from './NutritionFields';
 import HeaderComponent from '../components/HeaderComponent';
 import AddImage from '../assets/images/add_image.js';
@@ -581,10 +582,27 @@ class ImagetoTextEdit extends Component {
             </View>
           </KeyboardAvoidingView>
         </Modal>
-        <HeaderComponent
-          navigation={this.props.navigation}
-          name={'Image to text'}
-        />
+        <View style={Styles.home_screen_headers}>
+          <Animatable.View animation="bounceInLeft" duration={1500}>
+            <TouchableOpacity
+              onPress={() => {
+                this.props.navigation.pop();
+              }}>
+              <AntDesign
+                style={Styles.drawer_open}
+                name="arrowleft"
+                color="white"
+                size={30}
+              />
+            </TouchableOpacity>
+          </Animatable.View>
+          <Animatable.View
+            animation="bounceInRight"
+            duration={1500}
+            style={Styles.home_screen_headers_text_container}>
+            <Text style={Styles.home_screen_headers_text}>Image to text</Text>
+          </Animatable.View>
+        </View>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{paddingTop: 20, paddingLeft: 20, paddingRight: 20}}>
             <Animatable.View
