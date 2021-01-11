@@ -3,9 +3,10 @@ import {Dimensions} from 'react-native';
 import {Animated} from 'react-native';
 import {TypingAnimation} from 'react-native-typing-animation';
 export const FETCH_URL = {
+  //Heroku
+  IP: 'https://my-fridge09.herokuapp.com',
   //Phone
   // IP: 'http://192.168.18.48:3000',
-  IP: 'https://my-fridge09.herokuapp.com',
   //Emulator
   // IP: 'http://10.0.2.2:3000',
 };
